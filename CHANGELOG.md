@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `rcscodes/ci4-seotools` are documented here.
+All notable changes to `Cmmishra9/ci4-seotools` are documented here.
 Follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
@@ -102,6 +102,6 @@ _Changes queued for the next release._
 - GitHub Actions CI matrix: PHP 8.1–8.4 × CI4 4.4/4.5, PHPStan level 8, PHP-CS-Fixer
 - GitHub Actions auto-release workflow on tag push
 
-[Unreleased]: https://github.com/rcscodes/ci4-seotools/compare/v0.2.0...HEAD
-[0.2.0]: https://github.com/rcscodes/ci4-seotools/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/rcscodes/ci4-seotools/releases/tag/v0.1.0
+[Unreleased]: https://github.com/Cmmishra9/ci4-seotools/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Cmmishra9/ci4-seotools/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/Cmmishra9/ci4-seotools/releases/tag/v0.1.0
