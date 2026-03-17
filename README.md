@@ -2,10 +2,10 @@
 
 Enterprise-grade SEO Tools for **CodeIgniter 4** — a complete port and extension of the battle-tested [artesaos/seotools](https://github.com/artesaos/seotools) ecosystem, rebuilt from the ground up for CI4 with schema validation, AI-bot governance, multi-tenancy, and ≥95% test coverage.
 
-[![CI](https://github.com/rcscodes/ci4-seotools/actions/workflows/ci.yml/badge.svg)](https://github.com/rcscodes/ci4-seotools/actions)
-[![Latest Version](https://img.shields.io/packagist/v/rcscodes/ci4-seotools.svg)](https://packagist.org/packages/rcscodes/ci4-seotools)
-[![PHP Version](https://img.shields.io/badge/php-%5E8.1-blue)](https://packagist.org/packages/rcscodes/ci4-seotools)
-[![License](https://img.shields.io/packagist/l/rcscodes/ci4-seotools.svg)](LICENSE.md)
+[![CI](https://github.com/cmmishra9/ci4-seotools/actions/workflows/ci.yml/badge.svg)](https://github.com/cmmishra9/ci4-seotools/actions)
+[![Latest Version](https://img.shields.io/packagist/v/cmmishra9/ci4-seotools.svg)](https://packagist.org/packages/cmmishra9/ci4-seotools)
+[![PHP Version](https://img.shields.io/badge/php-%5E8.1-blue)](https://packagist.org/packages/cmmishra9/ci4-seotools)
+[![License](https://img.shields.io/packagist/l/cmmishra9/ci4-seotools.svg)](LICENSE.md)
 
 ---
 
@@ -52,7 +52,7 @@ Enterprise-grade SEO Tools for **CodeIgniter 4** — a complete port and extensi
 ## Installation
 
 ```bash
-composer require rcscodes/ci4-seotools
+composer require cmmishra9/ci4-seotools
 ```
 
 Publish the config file and view partials to your app:
