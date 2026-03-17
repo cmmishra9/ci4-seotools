@@ -4,8 +4,10 @@ Enterprise-grade SEO Tools for **CodeIgniter 4** — a complete port and extensi
 
 [![CI](https://github.com/cmmishra9/ci4-seotools/actions/workflows/ci.yml/badge.svg)](https://github.com/cmmishra9/ci4-seotools/actions)
 [![Latest Version](https://img.shields.io/packagist/v/cmmishra9/ci4-seotools.svg)](https://packagist.org/packages/cmmishra9/ci4-seotools)
+[![Downloads](https://img.shields.io/packagist/dt/cmmishra9/ci4-seotools.svg)](https://packagist.org/packages/cmmishra9/ci4-seotools)
 [![PHP Version](https://img.shields.io/badge/php-%5E8.1-blue)](https://packagist.org/packages/cmmishra9/ci4-seotools)
 [![License](https://img.shields.io/packagist/l/cmmishra9/ci4-seotools.svg)](LICENSE.md)
+
 
 ---
 
