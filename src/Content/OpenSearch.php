@@ -37,6 +37,7 @@ class OpenSearch
     public function setTitle(string $title): static
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -46,6 +47,7 @@ class OpenSearch
     public function setUrl(string $url): static
     {
         $this->url = $url;
+
         return $this;
     }
 
@@ -58,12 +60,14 @@ class OpenSearch
     public function setSearchUrl(string $url): static
     {
         $this->searchUrl = $url;
+
         return $this;
     }
 
     public function setEncoding(string $encoding): static
     {
         $this->encoding = $encoding;
+
         return $this;
     }
 
@@ -89,18 +93,18 @@ class OpenSearch
      */
     public function generateDescriptionXml(): string
     {
-        $title     = htmlspecialchars($this->title ?? 'Search', ENT_XML1 | ENT_QUOTES);
-        $searchUrl = htmlspecialchars($this->searchUrl ?? '', ENT_XML1 | ENT_QUOTES);
+        $title     = \htmlspecialchars($this->title ?? 'Search', ENT_XML1 | ENT_QUOTES);
+        $searchUrl = \htmlspecialchars($this->searchUrl ?? '', ENT_XML1 | ENT_QUOTES);
 
         return <<<XML
-<?xml version="1.0" encoding="{$this->encoding}"?>
-<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-    <ShortName>{$title}</ShortName>
-    <Description>Search {$title}</Description>
-    <InputEncoding>{$this->encoding}</InputEncoding>
-    <Url type="text/html" template="{$searchUrl}"/>
-</OpenSearchDescription>
-XML;
+            <?xml version="1.0" encoding="{$this->encoding}"?>
+            <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+                <ShortName>{$title}</ShortName>
+                <Description>Search {$title}</Description>
+                <InputEncoding>{$this->encoding}</InputEncoding>
+                <Url type="text/html" template="{$searchUrl}"/>
+            </OpenSearchDescription>
+            XML;
     }
 
     /**
@@ -112,6 +116,7 @@ XML;
         $response = service('response');
         $response->setHeader('Content-Type', 'application/opensearchdescription+xml; charset=' . $this->encoding);
         $response->setBody($this->generateDescriptionXml());
+
         return $response;
     }
 
@@ -120,6 +125,7 @@ XML;
         $this->title     = null;
         $this->url       = null;
         $this->searchUrl = null;
+
         return $this;
     }
 }

@@ -35,6 +35,7 @@ class SpeakableMarkup
     public function addCssSelector(string $selector): static
     {
         $this->cssSelectors[] = $selector;
+
         return $this;
     }
 
@@ -44,18 +45,21 @@ class SpeakableMarkup
         foreach ($selectors as $selector) {
             $this->addCssSelector($selector);
         }
+
         return $this;
     }
 
     public function addXPath(string $xpath): static
     {
         $this->xpaths[] = $xpath;
+
         return $this;
     }
 
     public function setUrl(string $url): static
     {
         $this->url = $url;
+
         return $this;
     }
 
@@ -91,7 +95,8 @@ class SpeakableMarkup
         }
 
         $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR | ($minify ? 0 : JSON_PRETTY_PRINT);
-        return '<script type="application/ld+json">' . json_encode($this->toArray(), $flags) . '</script>';
+
+        return '<script type="application/ld+json">' . \json_encode($this->toArray(), $flags) . '</script>';
     }
 
     public function reset(): static
@@ -99,6 +104,7 @@ class SpeakableMarkup
         $this->cssSelectors = [];
         $this->xpaths       = [];
         $this->url          = null;
+
         return $this;
     }
 }

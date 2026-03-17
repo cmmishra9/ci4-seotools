@@ -32,10 +32,12 @@ class RedirectHelper
     public static function register(string $from, ?string $to, int $code = 301): void
     {
         if (ENVIRONMENT !== 'production' && $to !== null && isset(static::$map[$to])) {
-            log_message('warning', sprintf(
+            log_message('warning', \sprintf(
                 '[SEOTools] Redirect chain detected: %s → %s → %s. '
                 . 'Collapse to a single redirect to preserve link equity.',
-                $from, $to, static::$map[$to]['to'] ?? '(gone)'
+                $from,
+                $to,
+                static::$map[$to]['to'] ?? '(gone)',
             ));
         }
 
@@ -49,6 +51,7 @@ class RedirectHelper
     {
         /** @var RedirectResponse $redirect */
         $redirect = redirect();
+
         return $redirect->to($url)->withCookies()->setStatusCode(301);
     }
 
@@ -59,6 +62,7 @@ class RedirectHelper
     {
         /** @var RedirectResponse $redirect */
         $redirect = redirect();
+
         return $redirect->to($url)->withCookies()->setStatusCode(302);
     }
 
@@ -72,6 +76,7 @@ class RedirectHelper
         $response = service('response');
         $response->setStatusCode(410);
         $response->setBody($message ?? 'This page has been permanently removed.');
+
         return $response;
     }
 

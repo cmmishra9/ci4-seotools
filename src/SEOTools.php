@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace RcsCodes\SEOTools;
 
 use RcsCodes\SEOTools\Concerns\MacroableTrait;
+use RcsCodes\SEOTools\Content\ResourceHints;
 use RcsCodes\SEOTools\Contracts\SEOToolsInterface;
+use RcsCodes\SEOTools\Enterprise\EEATMarkup;
 use RcsCodes\SEOTools\Meta\JsonLd;
 use RcsCodes\SEOTools\Meta\JsonLdMulti;
 use RcsCodes\SEOTools\Meta\OpenGraph;
@@ -13,10 +15,8 @@ use RcsCodes\SEOTools\Meta\SEOMeta;
 use RcsCodes\SEOTools\Meta\TwitterCard;
 use RcsCodes\SEOTools\Schema\SchemaGraph;
 use RcsCodes\SEOTools\Technical\HreflangManager;
-use RcsCodes\SEOTools\Content\ResourceHints;
 use RcsCodes\SEOTools\Technical\RobotsTxt;
 use RcsCodes\SEOTools\Technical\Sitemap;
-use RcsCodes\SEOTools\Enterprise\EEATMarkup;
 
 /**
  * SEOTools — the main aggregator / single entry point.
@@ -137,6 +137,7 @@ class SEOTools implements SEOToolsInterface
         $this->openGraph->setTitle($title);
         $this->twitterCard->setTitle($title);
         $this->jsonLd->setTitle($title);
+
         return $this;
     }
 
@@ -156,6 +157,7 @@ class SEOTools implements SEOToolsInterface
         $this->openGraph->setDescription($description);
         $this->twitterCard->setDescription($description);
         $this->jsonLd->setDescription($description);
+
         return $this;
     }
 
@@ -166,6 +168,7 @@ class SEOTools implements SEOToolsInterface
     {
         $this->seoMeta->setCanonical($url);
         $this->openGraph->setUrl($url);
+
         return $this;
     }
 
@@ -178,10 +181,12 @@ class SEOTools implements SEOToolsInterface
     {
         $urls = (array) $urls;
         $this->openGraph->addImages($urls);
+
         if (! empty($urls)) {
             $this->twitterCard->setImage($urls[0]);
             $this->jsonLd->addImage($urls);
         }
+
         return $this;
     }
 
@@ -217,7 +222,8 @@ class SEOTools implements SEOToolsInterface
         }
 
         $glue = $minify ? '' : "\n    ";
-        return implode($glue, array_filter($parts));
+
+        return \implode($glue, \array_filter($parts));
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -234,6 +240,7 @@ class SEOTools implements SEOToolsInterface
         $this->schemaGraph->reset();
         $this->hreflang->reset();
         $this->resourceHints->reset();
+
         return $this;
     }
 }

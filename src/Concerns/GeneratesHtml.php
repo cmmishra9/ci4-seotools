@@ -42,9 +42,11 @@ trait GeneratesHtml
     protected function linkTag(string $rel, string $href, array $extras = []): string
     {
         $extra = '';
+
         foreach ($extras as $key => $val) {
             $extra .= ' ' . esc($key) . '="' . esc($val) . '"';
         }
+
         return '<link rel="' . esc($rel) . '" href="' . esc($href) . '"' . $extra . '>';
     }
 
@@ -55,7 +57,8 @@ trait GeneratesHtml
      */
     protected function joinLines(array $lines, bool $minify, string $indent = '    '): string
     {
-        $lines = array_values(array_filter($lines));
-        return implode($minify ? '' : "\n" . $indent, $lines);
+        $lines = \array_values(\array_filter($lines));
+
+        return \implode($minify ? '' : "\n" . $indent, $lines);
     }
 }

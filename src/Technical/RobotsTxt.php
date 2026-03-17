@@ -61,6 +61,7 @@ class RobotsTxt
     {
         $this->ensureAgent($userAgent);
         $this->rules[$userAgent]['allow'][] = $path;
+
         return $this;
     }
 
@@ -68,6 +69,7 @@ class RobotsTxt
     {
         $this->ensureAgent($userAgent);
         $this->rules[$userAgent]['disallow'][] = $path;
+
         return $this;
     }
 
@@ -75,12 +77,14 @@ class RobotsTxt
     {
         $this->ensureAgent($userAgent);
         $this->rules[$userAgent]['crawl_delay'] = $seconds;
+
         return $this;
     }
 
     public function addSitemap(string $url): static
     {
         $this->sitemaps[] = $url;
+
         return $this;
     }
 
@@ -120,6 +124,7 @@ class RobotsTxt
         foreach (self::AI_BOTS as $bot => $_) {
             $this->disallow($bot, '/');
         }
+
         return $this;
     }
 
@@ -135,6 +140,7 @@ class RobotsTxt
                 $this->disallow($bot, '/');
             }
         }
+
         return $this;
     }
 
@@ -152,9 +158,11 @@ class RobotsTxt
             foreach ($rule['allow'] as $path) {
                 $lines[] = 'Allow: ' . $path;
             }
+
             foreach ($rule['disallow'] as $path) {
                 $lines[] = 'Disallow: ' . $path;
             }
+
             if ($rule['crawl_delay'] !== null) {
                 $lines[] = 'Crawl-delay: ' . $rule['crawl_delay'];
             }
@@ -166,7 +174,7 @@ class RobotsTxt
             $lines[] = 'Sitemap: ' . $sitemap;
         }
 
-        return implode("\n", $lines);
+        return \implode("\n", $lines);
     }
 
     /**
@@ -178,6 +186,7 @@ class RobotsTxt
         $response = service('response');
         $response->setHeader('Content-Type', 'text/plain; charset=UTF-8');
         $response->setBody($this->generate());
+
         return $response;
     }
 
@@ -186,6 +195,7 @@ class RobotsTxt
         $this->rules    = [];
         $this->sitemaps = [];
         $this->applyConfigDefaults();
+
         return $this;
     }
 
@@ -204,8 +214,14 @@ class RobotsTxt
     {
         foreach ($this->config->robots['default_rules'] ?? [] as $agent => $rule) {
             $this->ensureAgent($agent);
-            foreach ($rule['allow']    ?? [] as $path) $this->allow($agent, $path);
-            foreach ($rule['disallow'] ?? [] as $path) $this->disallow($agent, $path);
+
+            foreach ($rule['allow']    ?? [] as $path) {
+                $this->allow($agent, $path);
+            }
+
+            foreach ($rule['disallow'] ?? [] as $path) {
+                $this->disallow($agent, $path);
+            }
         }
     }
 }

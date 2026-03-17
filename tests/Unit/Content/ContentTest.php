@@ -80,14 +80,15 @@ class ContentTest extends TestCase
     {
         $rh = new ResourceHints();
         $rh->preconnect('https://fonts.googleapis.com')
-           ->dnsPrefetch('https://cdn.example.com')
-           ->preload('/hero.jpg', 'image');
+            ->dnsPrefetch('https://cdn.example.com')
+            ->preload('/hero.jpg', 'image')
+        ;
         $html = $rh->generate();
         $this->assertStringContainsString('preconnect', $html);
         $this->assertStringContainsString('dns-prefetch', $html);
         $this->assertStringContainsString('preload', $html);
         // Order: preconnect before dns-prefetch before preload
-        $this->assertLessThan(strpos($html, 'dns-prefetch'), strpos($html, 'preconnect'));
+        $this->assertLessThan(\strpos($html, 'dns-prefetch'), \strpos($html, 'preconnect'));
     }
 
     public function testResourceHintsMinify(): void
@@ -157,7 +158,8 @@ class ContentTest extends TestCase
     {
         $amp = new AmpMeta();
         $amp->setAmpUrl('https://example.com/amp')
-            ->setCanonicalUrl('https://example.com/');
+            ->setCanonicalUrl('https://example.com/')
+        ;
         $amp->reset();
         $this->assertSame('', $amp->generateForCanonical());
         $this->assertSame('', $amp->generateForAmp());
@@ -167,14 +169,15 @@ class ContentTest extends TestCase
     {
         $amp = new AmpMeta();
         $amp->setAmpUrl('https://example.com/amp')
-            ->setCanonicalUrl('https://example.com/');
+            ->setCanonicalUrl('https://example.com/')
+        ;
         $canonical = $amp->generateForCanonical();
         $ampPage   = $amp->generateForAmp();
         $this->assertStringContainsString('amphtml', $canonical);
         $this->assertStringContainsString('canonical', $ampPage);
         // Each outputs exactly one link tag
-        $this->assertSame(1, substr_count($canonical, '<link'));
-        $this->assertSame(1, substr_count($ampPage, '<link'));
+        $this->assertSame(1, \substr_count($canonical, '<link'));
+        $this->assertSame(1, \substr_count($ampPage, '<link'));
     }
 
     // ── RssMeta ───────────────────────────────────────────────────────────────
@@ -212,9 +215,10 @@ class ContentTest extends TestCase
     {
         $rss = new RssMeta();
         $rss->addRss('https://example.com/rss')
-            ->addAtom('https://example.com/atom');
+            ->addAtom('https://example.com/atom')
+        ;
         $html = $rss->generate();
-        $this->assertSame(2, substr_count($html, '<link'));
+        $this->assertSame(2, \substr_count($html, '<link'));
     }
 
     public function testRssMetaMinify(): void
@@ -245,7 +249,8 @@ class ContentTest extends TestCase
     {
         $os = new OpenSearch();
         $os->setTitle('Search My Site')
-           ->setUrl('https://example.com/opensearch.xml');
+            ->setUrl('https://example.com/opensearch.xml')
+        ;
         $html = $os->generateLinkTag();
         $this->assertStringContainsString('rel="search"', $html);
         $this->assertStringContainsString('application/opensearchdescription+xml', $html);
@@ -272,7 +277,8 @@ class ContentTest extends TestCase
     {
         $os = new OpenSearch();
         $os->setTitle('My Site Search')
-           ->setSearchUrl('https://example.com/search?q={searchTerms}');
+            ->setSearchUrl('https://example.com/search?q={searchTerms}')
+        ;
         $xml = $os->generateDescriptionXml();
         $this->assertStringContainsString('<?xml version="1.0"', $xml);
         $this->assertStringContainsString('<ShortName>My Site Search</ShortName>', $xml);
@@ -304,7 +310,7 @@ class ContentTest extends TestCase
         $response = $os->toResponse();
         $this->assertStringContainsString(
             'application/opensearchdescription+xml',
-            $response->getHeaderLine('Content-Type')
+            $response->getHeaderLine('Content-Type'),
         );
     }
 }

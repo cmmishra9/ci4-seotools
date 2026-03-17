@@ -8,7 +8,10 @@ use RcsCodes\SEOTools\Schema\AbstractSchema;
 
 class JobPosting extends AbstractSchema
 {
-    protected function schemaType(): string { return 'JobPosting'; }
+    protected function schemaType(): string
+    {
+        return 'JobPosting';
+    }
 
     protected function requiredFields(): array
     {
@@ -33,14 +36,22 @@ class JobPosting extends AbstractSchema
     public function setHiringOrganization(string $name, string $url, ?string $logo = null): static
     {
         $org = ['@type' => 'Organization', 'name' => $name, 'sameAs' => $url];
-        if ($logo) $org['logo'] = $logo;
+
+        if ($logo) {
+            $org['logo'] = $logo;
+        }
+
         return $this->set('hiringOrganization', $org);
     }
 
     public function setJobLocation(string $city, string $country, ?string $region = null): static
     {
         $addr = ['@type' => 'PostalAddress', 'addressLocality' => $city, 'addressCountry' => $country];
-        if ($region) $addr['addressRegion'] = $region;
+
+        if ($region) {
+            $addr['addressRegion'] = $region;
+        }
+
         return $this->set('jobLocation', ['@type' => 'Place', 'address' => $addr]);
     }
 

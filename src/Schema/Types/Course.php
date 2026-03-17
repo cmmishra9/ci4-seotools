@@ -31,9 +31,11 @@ class Course extends AbstractSchema
     public function setProvider(string $name, ?string $url = null): static
     {
         $provider = ['@type' => 'Organization', 'name' => $name];
+
         if ($url !== null) {
             $provider['sameAs'] = $url;
         }
+
         return $this->set('provider', $provider);
     }
 
@@ -67,7 +69,7 @@ class Course extends AbstractSchema
     }
 
     /**
-     * @param 'Free'|'Paid'|string $price  Use 'Free' or a numeric string
+     * @param 'Free'|'Paid'|string $price Use 'Free' or a numeric string
      */
     public function setCoursePrice(string $price, string $currency = 'USD'): static
     {
@@ -79,6 +81,7 @@ class Course extends AbstractSchema
                 'category'      => 'Free',
             ]);
         }
+
         return $this->set('offers', [
             '@type'         => 'Offer',
             'price'         => $price,

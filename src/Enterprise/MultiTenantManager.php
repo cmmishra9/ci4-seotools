@@ -40,9 +40,9 @@ class MultiTenantManager
     /**
      * Detect the current domain and merge its overrides into the live config.
      *
-     * @param  object|null $config  If supplied, merges into this config object and returns it.
-     *                              If null, merges into the instance config in-place.
-     * @return object  The (possibly mutated) config object.
+     * @param object|null $config If supplied, merges into this config object and returns it.
+     *                            If null, merges into the instance config in-place.
+     * @return object The (possibly mutated) config object.
      */
     public function apply(?object $config = null): object
     {
@@ -80,10 +80,11 @@ class MultiTenantManager
     {
         // Prefer HTTP_HOST (set by web server and testable without a full URL parse)
         if (! empty($_SERVER['HTTP_HOST'])) {
-            return strtolower($_SERVER['HTTP_HOST']);
+            return \strtolower($_SERVER['HTTP_HOST']);
         }
-        $host = parse_url(current_url(), PHP_URL_HOST);
-        return is_string($host) ? $host : '';
+        $host = \parse_url(current_url(), PHP_URL_HOST);
+
+        return \is_string($host) ? $host : '';
     }
 
     /**
@@ -93,13 +94,15 @@ class MultiTenantManager
     protected function wildcardMatch(string $domain, array $tenants): array
     {
         foreach ($tenants as $pattern => $config) {
-            if (str_starts_with($pattern, '*.')) {
-                $suffix = substr($pattern, 2);
-                if (str_ends_with($domain, $suffix)) {
+            if (\str_starts_with($pattern, '*.')) {
+                $suffix = \substr($pattern, 2);
+
+                if (\str_ends_with($domain, $suffix)) {
                     return $config;
                 }
             }
         }
+
         return [];
     }
 
@@ -111,10 +114,10 @@ class MultiTenantManager
     protected function mergeConfig(array $override): void
     {
         foreach ($override as $section => $values) {
-            if (property_exists($this->config, $section) && is_array($values)) {
+            if (\property_exists($this->config, $section) && \is_array($values)) {
                 /** @var array<string,mixed> $existing */
                 $existing = $this->config->{$section};
-                $this->config->{$section} = array_replace_recursive($existing, $values);
+                $this->config->{$section} = \array_replace_recursive($existing, $values);
             }
         }
     }

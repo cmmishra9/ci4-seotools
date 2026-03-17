@@ -8,7 +8,10 @@ use RcsCodes\SEOTools\Schema\AbstractSchema;
 
 class Article extends AbstractSchema
 {
-    protected function schemaType(): string { return 'Article'; }
+    protected function schemaType(): string
+    {
+        return 'Article';
+    }
 
     protected function requiredFields(): array
     {
@@ -50,7 +53,7 @@ class Article extends AbstractSchema
     /** @param array<string>|string $keywords */
     public function setKeywords(array|string $keywords): static
     {
-        return $this->set('keywords', is_array($keywords) ? implode(', ', $keywords) : $keywords);
+        return $this->set('keywords', \is_array($keywords) ? \implode(', ', $keywords) : $keywords);
     }
 
     public function setWordCount(int $count): static

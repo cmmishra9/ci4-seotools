@@ -25,18 +25,20 @@ class SchemaGraph
     public function add(AbstractSchema $schema): static
     {
         $this->schemas[] = $schema;
+
         return $this;
     }
 
     public function remove(int $index): static
     {
-        array_splice($this->schemas, $index, 1);
+        \array_splice($this->schemas, $index, 1);
+
         return $this;
     }
 
     public function count(): int
     {
-        return count($this->schemas);
+        return \count($this->schemas);
     }
 
     public function isEmpty(): bool
@@ -53,9 +55,9 @@ class SchemaGraph
     {
         return [
             '@context' => 'https://schema.org',
-            '@graph'   => array_map(
-                fn(AbstractSchema $s) => $s->toEmbeddedArray(),
-                $this->schemas
+            '@graph'   => \array_map(
+                fn (AbstractSchema $s) => $s->toEmbeddedArray(),
+                $this->schemas,
             ),
         ];
     }
@@ -70,16 +72,18 @@ class SchemaGraph
         }
 
         $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR;
+
         if (! $minify) {
             $flags |= JSON_PRETTY_PRINT;
         }
 
-        return '<script type="application/ld+json">' . json_encode($this->toArray(), $flags) . '</script>';
+        return '<script type="application/ld+json">' . \json_encode($this->toArray(), $flags) . '</script>';
     }
 
     public function reset(): static
     {
         $this->schemas = [];
+
         return $this;
     }
 }

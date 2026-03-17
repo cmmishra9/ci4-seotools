@@ -94,7 +94,7 @@ class SEOTools extends BaseConfig
     /** @var array<string,mixed> */
     public array $sitemap = [
         'cache'         => true,
-        'cache_duration'=> 3600,
+        'cache_duration' => 3600,
         'gzip'          => false,
         'max_urls'      => 50000,           // per sitemap file (Google limit)
         'defaults' => [

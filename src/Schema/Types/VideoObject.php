@@ -8,7 +8,10 @@ use RcsCodes\SEOTools\Schema\AbstractSchema;
 
 class VideoObject extends AbstractSchema
 {
-    protected function schemaType(): string { return 'VideoObject'; }
+    protected function schemaType(): string
+    {
+        return 'VideoObject';
+    }
 
     protected function requiredFields(): array
     {

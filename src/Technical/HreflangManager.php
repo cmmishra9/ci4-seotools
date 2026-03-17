@@ -32,19 +32,21 @@ class HreflangManager
     public function addLanguage(string $lang, string $url): static
     {
         $this->languages[] = ['lang' => $lang, 'url' => $url];
+
         return $this;
     }
 
     /**
      * Add multiple languages at once.
      *
-     * @param array<string, string> $languages  ['en' => 'https://...', 'fr' => 'https://...']
+     * @param array<string, string> $languages ['en' => 'https://...', 'fr' => 'https://...']
      */
     public function addLanguages(array $languages): static
     {
         foreach ($languages as $lang => $url) {
             $this->addLanguage($lang, $url);
         }
+
         return $this;
     }
 
@@ -54,6 +56,7 @@ class HreflangManager
     public function setDefault(string $url): static
     {
         $this->default = $url;
+
         return $this;
     }
 
@@ -79,6 +82,7 @@ class HreflangManager
     {
         $this->languages = [];
         $this->default   = null;
+
         return $this;
     }
 }

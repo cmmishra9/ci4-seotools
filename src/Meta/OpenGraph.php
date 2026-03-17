@@ -48,10 +48,11 @@ class OpenGraph implements OpenGraphInterface
     public function addProperty(string $key, array|string $value): static
     {
         // Guard: strip leading 'og:' prefix — we add it ourselves in generate()
-        if (str_starts_with($key, 'og:')) {
-            $key = substr($key, 3);
+        if (\str_starts_with($key, 'og:')) {
+            $key = \substr($key, 3);
         }
         $this->properties[$key] = $value;
+
         return $this;
     }
 
@@ -62,7 +63,7 @@ class OpenGraph implements OpenGraphInterface
 
     public function setDescription(string $description): static
     {
-        return $this->addProperty('description', strip_tags($description));
+        return $this->addProperty('description', \strip_tags($description));
     }
 
     public function setUrl(string $url): static
@@ -95,13 +96,14 @@ class OpenGraph implements OpenGraphInterface
      */
     public function addImage(array|string $url, array $attrs = []): static
     {
-        if (is_array($url)) {
+        if (\is_array($url)) {
             $this->images[] = $url;
         } elseif (! empty($attrs)) {
-            $this->images[] = array_merge(['url' => $url], $attrs);
+            $this->images[] = \array_merge(['url' => $url], $attrs);
         } else {
             $this->images[] = ['url' => $url];
         }
+
         return $this;
     }
 
@@ -111,20 +113,23 @@ class OpenGraph implements OpenGraphInterface
         foreach ($urls as $url) {
             $this->addImage($url);
         }
+
         return $this;
     }
 
     /** @param array<string, string> $attrs */
     public function addVideo(string $url, array $attrs = []): static
     {
-        $this->videos[] = array_merge(['url' => $url], $attrs);
+        $this->videos[] = \array_merge(['url' => $url], $attrs);
+
         return $this;
     }
 
     /** @param array<string, string> $attrs */
     public function addAudio(string $url, array $attrs = []): static
     {
-        $this->audios[] = array_merge(['url' => $url], $attrs);
+        $this->audios[] = \array_merge(['url' => $url], $attrs);
+
         return $this;
     }
 
@@ -216,7 +221,8 @@ class OpenGraph implements OpenGraphInterface
             if ($key === 'url' && $value === '__auto__') {
                 $value = current_url();
             }
-            if (is_array($value)) {
+
+            if (\is_array($value)) {
                 foreach ($value as $val) {
                     $html[] = $this->metaPropertyTag('og:' . $key, (string) $val);
                 }
@@ -226,14 +232,15 @@ class OpenGraph implements OpenGraphInterface
         }
 
         foreach ($this->images as $image) {
-            $url    = is_array($image) ? ($image['url'] ?? '') : $image;
+            $url    = \is_array($image) ? ($image['url'] ?? '') : $image;
             $html[] = $this->metaPropertyTag('og:image', $url);
 
-            if (is_array($image)) {
+            if (\is_array($image)) {
                 // Auto-populate secure_url when image is https and secure_url not set
-                if (empty($image['secure_url']) && str_starts_with($url, 'https://')) {
+                if (empty($image['secure_url']) && \str_starts_with($url, 'https://')) {
                     $image['secure_url'] = $url;
                 }
+
                 foreach (['secure_url', 'type', 'width', 'height', 'size', 'alt'] as $attr) {
                     if (! empty($image[$attr])) {
                         $html[] = $this->metaPropertyTag('og:image:' . $attr, (string) $image[$attr]);
@@ -244,6 +251,7 @@ class OpenGraph implements OpenGraphInterface
 
         foreach ($this->videos as $video) {
             $html[] = $this->metaPropertyTag('og:video', $video['url']);
+
             foreach (['secure_url', 'type', 'width', 'height'] as $attr) {
                 if (! empty($video[$attr])) {
                     $html[] = $this->metaPropertyTag('og:video:' . $attr, $video[$attr]);
@@ -253,6 +261,7 @@ class OpenGraph implements OpenGraphInterface
 
         foreach ($this->audios as $audio) {
             $html[] = $this->metaPropertyTag('og:audio', $audio['url']);
+
             foreach (['secure_url', 'type'] as $attr) {
                 if (! empty($audio[$attr])) {
                     $html[] = $this->metaPropertyTag('og:audio:' . $attr, $audio[$attr]);
@@ -274,6 +283,7 @@ class OpenGraph implements OpenGraphInterface
         $this->videos     = [];
         $this->audios     = [];
         $this->applyDefaults();
+
         return $this;
     }
 
@@ -285,9 +295,10 @@ class OpenGraph implements OpenGraphInterface
     protected function setNamespace(string $ns, array $attributes): static
     {
         foreach ($attributes as $key => $value) {
-            $full = str_starts_with($key, $ns . ':') ? $key : $ns . ':' . $key;
+            $full = \str_starts_with($key, $ns . ':') ? $key : $ns . ':' . $key;
             $this->properties[$full] = $value;
         }
+
         return $this;
     }
 
@@ -299,15 +310,18 @@ class OpenGraph implements OpenGraphInterface
             if ($value === false) {
                 continue;
             }
+
             if ($key === 'images') {
                 foreach ((array) $value as $img) {
                     $this->addImage($img);
                 }
                 continue;
             }
+
             if ($key === 'url' && $value === null) {
                 $value = '__auto__'; // resolved lazily in generate()
             }
+
             if ($value !== false && $value !== null) {
                 $this->properties[$key] = $value;
             }

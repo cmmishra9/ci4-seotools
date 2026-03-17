@@ -8,7 +8,10 @@ use RcsCodes\SEOTools\Schema\AbstractSchema;
 
 class Event extends AbstractSchema
 {
-    protected function schemaType(): string { return 'Event'; }
+    protected function schemaType(): string
+    {
+        return 'Event';
+    }
 
     protected function requiredFields(): array
     {
@@ -28,16 +31,21 @@ class Event extends AbstractSchema
     /** @param string|array<string, mixed> $location */
     public function setLocation(string|array $location): static
     {
-        if (is_string($location)) {
+        if (\is_string($location)) {
             $location = ['@type' => 'Place', 'name' => $location];
         }
+
         return $this->set('location', $location);
     }
 
     public function setOrganizer(string $name, ?string $url = null): static
     {
         $org = ['@type' => 'Organization', 'name' => $name];
-        if ($url) $org['url'] = $url;
+
+        if ($url) {
+            $org['url'] = $url;
+        }
+
         return $this->set('organizer', $org);
     }
 
@@ -49,12 +57,12 @@ class Event extends AbstractSchema
 
     public function setEventStatus(string $status): static
     {
-        return $this->set('eventStatus', 'https://schema.org/' . ltrim($status, '/'));
+        return $this->set('eventStatus', 'https://schema.org/' . \ltrim($status, '/'));
     }
 
     public function setEventAttendanceMode(string $mode): static
     {
-        return $this->set('eventAttendanceMode', 'https://schema.org/' . ltrim($mode, '/'));
+        return $this->set('eventAttendanceMode', 'https://schema.org/' . \ltrim($mode, '/'));
     }
 }
 

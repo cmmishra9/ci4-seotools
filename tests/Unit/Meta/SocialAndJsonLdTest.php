@@ -99,9 +99,9 @@ class SocialAndJsonLdTest extends TestCase
     public function testJsonLdDefault(): void
     {
         $jl = new JsonLd();
-        $data = json_decode(
-            strip_tags($jl->generate()),
-            true
+        $data = \json_decode(
+            \strip_tags($jl->generate()),
+            true,
         );
         $this->assertSame('https://schema.org', $data['@context']);
         $this->assertSame('WebPage', $data['@type']);
@@ -111,7 +111,7 @@ class SocialAndJsonLdTest extends TestCase
     {
         $jl = new JsonLd();
         $jl->setType('Article');
-        $data = json_decode(strip_tags($jl->generate()), true);
+        $data = \json_decode(\strip_tags($jl->generate()), true);
         $this->assertSame('Article', $data['@type']);
     }
 
@@ -119,10 +119,11 @@ class SocialAndJsonLdTest extends TestCase
     {
         $jl = new JsonLd();
         $jl->setTitle('Title')
-           ->setDescription('Desc')
-           ->setUrl('https://example.com')
-           ->addImage('https://example.com/img.jpg');
-        $data = json_decode(strip_tags($jl->generate()), true);
+            ->setDescription('Desc')
+            ->setUrl('https://example.com')
+            ->addImage('https://example.com/img.jpg')
+        ;
+        $data = \json_decode(\strip_tags($jl->generate()), true);
         $this->assertSame('Title', $data['name']);
         $this->assertSame('Desc', $data['description']);
         $this->assertSame('https://example.com', $data['url']);
@@ -133,7 +134,7 @@ class SocialAndJsonLdTest extends TestCase
     {
         $jl = new JsonLd();
         $jl->addImage('https://example.com/a.jpg')->addImage('https://example.com/b.jpg');
-        $data = json_decode(strip_tags($jl->generate()), true);
+        $data = \json_decode(\strip_tags($jl->generate()), true);
         $this->assertIsArray($data['image']);
         $this->assertCount(2, $data['image']);
     }
@@ -142,7 +143,7 @@ class SocialAndJsonLdTest extends TestCase
     {
         $jl = new JsonLd();
         $jl->addImage('https://example.com/a.jpg')->setImage('https://example.com/b.jpg');
-        $data = json_decode(strip_tags($jl->generate()), true);
+        $data = \json_decode(\strip_tags($jl->generate()), true);
         $this->assertSame('https://example.com/b.jpg', $data['image']);
     }
 
@@ -150,7 +151,7 @@ class SocialAndJsonLdTest extends TestCase
     {
         $jl = new JsonLd();
         $jl->addValue('author', ['@type' => 'Person', 'name' => 'Jane']);
-        $data = json_decode(strip_tags($jl->generate()), true);
+        $data = \json_decode(\strip_tags($jl->generate()), true);
         $this->assertSame('Jane', $data['author']['name']);
     }
 
@@ -167,7 +168,7 @@ class SocialAndJsonLdTest extends TestCase
         $jl = new JsonLd();
         $jl->setTitle('X')->setDescription('Y');
         $jl->reset();
-        $data = json_decode(strip_tags($jl->generate()), true);
+        $data = \json_decode(\strip_tags($jl->generate()), true);
         $this->assertArrayNotHasKey('name', $data);
         $this->assertArrayNotHasKey('description', $data);
     }
@@ -188,7 +189,7 @@ class SocialAndJsonLdTest extends TestCase
         $jlm->setTitle('First');
         $jlm->newJsonLd()->setTitle('Second');
         $html = $jlm->generate();
-        $this->assertSame(2, substr_count($html, '<script type="application/ld+json">'));
+        $this->assertSame(2, \substr_count($html, '<script type="application/ld+json">'));
     }
 
     public function testJsonLdMultiSelect(): void
@@ -227,6 +228,6 @@ class SocialAndJsonLdTest extends TestCase
         $jlm->setTitle('A');
         $jlm->newJsonLd()->setTitle('B');
         $jlm->reset();
-        $this->assertSame(1, substr_count($jlm->generate(), '<script type="application/ld+json">'));
+        $this->assertSame(1, \substr_count($jlm->generate(), '<script type="application/ld+json">'));
     }
 }

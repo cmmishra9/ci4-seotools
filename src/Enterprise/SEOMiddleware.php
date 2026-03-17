@@ -55,19 +55,21 @@ class SEOMiddleware implements FilterInterface
 
         // Only process HTML responses
         $contentType = $response->getHeaderLine('Content-Type');
-        if (! str_contains($contentType, 'text/html') && ! empty($contentType)) {
+
+        if (! \str_contains($contentType, 'text/html') && ! empty($contentType)) {
             return $response;
         }
 
         $body = $response->getBody();
-        if (empty($body) || ! str_contains($body, '<head')) {
+
+        if (empty($body) || ! \str_contains($body, '<head')) {
             return $response;
         }
 
         // Auto-inject canonical if missing
-        if (! str_contains($body, 'rel="canonical"')) {
+        if (! \str_contains($body, 'rel="canonical"')) {
             $canonical = '<link rel="canonical" href="' . current_url() . '">';
-            $body      = str_replace('</head>', $canonical . "\n</head>", $body);
+            $body      = \str_replace('</head>', $canonical . "\n</head>", $body);
             $response->setBody($body);
         }
 

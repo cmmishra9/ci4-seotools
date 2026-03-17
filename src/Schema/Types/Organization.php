@@ -8,7 +8,10 @@ use RcsCodes\SEOTools\Schema\AbstractSchema;
 
 class Organization extends AbstractSchema
 {
-    protected function schemaType(): string { return 'Organization'; }
+    protected function schemaType(): string
+    {
+        return 'Organization';
+    }
 
     public function setLogo(string $url): static
     {

@@ -14,7 +14,7 @@ interface JsonLdInterface
     public function addImage(array|string $url): static;
     /** @param array<string>|string $url */
     public function setImage(array|string $url): static;
-    /** @param mixed $value */
+    /**  */
     public function addValue(string $key, mixed $value): static;
     /** @return array<string,mixed> */
     public function toArray(): array;

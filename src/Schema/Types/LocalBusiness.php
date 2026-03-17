@@ -8,7 +8,10 @@ use RcsCodes\SEOTools\Schema\AbstractSchema;
 
 class LocalBusiness extends AbstractSchema
 {
-    protected function schemaType(): string { return 'LocalBusiness'; }
+    protected function schemaType(): string
+    {
+        return 'LocalBusiness';
+    }
 
     protected function requiredFields(): array
     {
@@ -18,9 +21,10 @@ class LocalBusiness extends AbstractSchema
     /** @param array<string, mixed>|string $address */
     public function setAddress(array|string $address): static
     {
-        if (is_string($address)) {
+        if (\is_string($address)) {
             $address = ['@type' => 'PostalAddress', 'streetAddress' => $address];
         }
+
         return $this->set('address', $address);
     }
 

@@ -38,28 +38,60 @@ class ConcernsAndMiddlewareTest extends TestCase
      */
     private function makeResponse(string $body = '', string $contentType = 'text/html; charset=UTF-8'): \CodeIgniter\HTTP\ResponseInterface
     {
-        return new class($body, $contentType) implements \CodeIgniter\HTTP\ResponseInterface {
+        return new class ($body, $contentType) implements \CodeIgniter\HTTP\ResponseInterface {
             private string $body;
             private array  $headers;
-            public function __construct(string $body, string $ct) {
+            public function __construct(string $body, string $ct)
+            {
                 $this->body    = $body;
                 $this->headers = ['Content-Type' => $ct];
             }
-            public function getHeaderLine(string $k): string { return $this->headers[$k] ?? ''; }
-            public function setHeader(string $k, $v): object { $this->headers[$k] = $v; return $this; }
-            public function getBody(): string { return $this->body; }
-            public function setBody($b): object { $this->body = (string)$b; return $this; }
-            public function setContentType(string $m, string $c = 'UTF-8'): object { return $this; }
-            public function setStatusCode(int $c, string $r = ''): object { return $this; }
-            public function getStatusCode(): int { return 200; }
+            public function getHeaderLine(string $k): string
+            {
+                return $this->headers[$k] ?? '';
+            }
+            public function setHeader(string $k, $v): object
+            {
+                $this->headers[$k] = $v;
+
+                return $this;
+            }
+            public function getBody(): string
+            {
+                return $this->body;
+            }
+            public function setBody($b): object
+            {
+                $this->body = (string)$b;
+
+                return $this;
+            }
+            public function setContentType(string $m, string $c = 'UTF-8'): object
+            {
+                return $this;
+            }
+            public function setStatusCode(int $c, string $r = ''): object
+            {
+                return $this;
+            }
+            public function getStatusCode(): int
+            {
+                return 200;
+            }
         };
     }
 
     private function makeRequest(): \CodeIgniter\HTTP\RequestInterface
     {
-        return new class implements \CodeIgniter\HTTP\RequestInterface {
-            public function getMethod(bool $upper = false): string { return 'GET'; }
-            public function getHeaderLine(string $n): string { return ''; }
+        return new class () implements \CodeIgniter\HTTP\RequestInterface {
+            public function getMethod(bool $upper = false): string
+            {
+                return 'GET';
+            }
+            public function getHeaderLine(string $n): string
+            {
+                return '';
+            }
         };
     }
 
@@ -79,7 +111,7 @@ class ConcernsAndMiddlewareTest extends TestCase
         $mw   = new SEOMiddleware();
         $result = $mw->after($this->makeRequest(), $this->makeResponse($body));
         // Should not add a second canonical
-        $this->assertSame(1, substr_count($result->getBody(), 'rel="canonical"'));
+        $this->assertSame(1, \substr_count($result->getBody(), 'rel="canonical"'));
     }
 
     public function testMiddlewareSkipsNonHtmlResponse(): void
@@ -127,8 +159,8 @@ class ConcernsAndMiddlewareTest extends TestCase
         $body = '<html><head><title>Test</title></head><body>content</body></html>';
         $result = $mw->after($this->makeRequest(), $this->makeResponse($body));
         // canonical must appear before </head>
-        $pos_canonical = strpos($result->getBody(), 'rel="canonical"');
-        $pos_head_close = strpos($result->getBody(), '</head>');
+        $pos_canonical = \strpos($result->getBody(), 'rel="canonical"');
+        $pos_head_close = \strpos($result->getBody(), '</head>');
         $this->assertLessThan($pos_head_close, $pos_canonical);
     }
 
@@ -136,7 +168,7 @@ class ConcernsAndMiddlewareTest extends TestCase
 
     public function testSeoToolsTraitLazyInit(): void
     {
-        $controller = new class {
+        $controller = new class () {
             use SEOToolsTrait;
         };
         // seo() should return an SEOTools instance
@@ -145,7 +177,7 @@ class ConcernsAndMiddlewareTest extends TestCase
 
     public function testSeoToolsTraitReturnsSameInstance(): void
     {
-        $controller = new class {
+        $controller = new class () {
             use SEOToolsTrait;
         };
         $this->assertSame($controller->seo(), $controller->seo());
@@ -153,7 +185,7 @@ class ConcernsAndMiddlewareTest extends TestCase
 
     public function testSeoToolsTraitCanSetTitle(): void
     {
-        $controller = new class {
+        $controller = new class () {
             use SEOToolsTrait;
         };
         $controller->seo()->setTitle('Trait Title');
@@ -162,8 +194,12 @@ class ConcernsAndMiddlewareTest extends TestCase
 
     public function testSeoToolsTraitIsolatedBetweenInstances(): void
     {
-        $c1 = new class { use SEOToolsTrait; };
-        $c2 = new class { use SEOToolsTrait; };
+        $c1 = new class () {
+            use SEOToolsTrait;
+        };
+        $c2 = new class () {
+            use SEOToolsTrait;
+        };
         $c1->seo()->setTitle('Controller One');
         $c2->seo()->setTitle('Controller Two');
         $this->assertStringContainsString('Controller One', $c1->seo()->generate());
@@ -240,7 +276,7 @@ class ConcernsAndMiddlewareTest extends TestCase
 
     public function testFlushMacrosClearsAll(): void
     {
-        SEOTools::macro('tempMacro', fn() => 'x');
+        SEOTools::macro('tempMacro', fn () => 'x');
         SEOTools::flushMacros();
         $this->assertFalse(SEOTools::hasMacro('tempMacro'));
     }

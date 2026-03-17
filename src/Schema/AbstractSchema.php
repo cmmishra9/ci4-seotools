@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace RcsCodes\SEOTools\Schema;
 
-use InvalidArgumentException;
 use RcsCodes\SEOTools\Contracts\SchemaInterface;
 
 /**
@@ -39,7 +38,7 @@ abstract class AbstractSchema implements SchemaInterface
     /** @var array<string,mixed> */
     protected array $data = [];
 
-    /** @var string|null  Schema.org @id (URL or blank node) */
+    /** @var string|null Schema.org @id (URL or blank node) */
     protected ?string $id = null;
 
     // ── Generic setters ───────────────────────────────────────────────────────
@@ -51,34 +50,34 @@ abstract class AbstractSchema implements SchemaInterface
     public function setId(string $id): static
     {
         $this->id = $id;
+
         return $this;
     }
 
     /**
      * Add / override any Schema.org property.
-     *
-     * @param mixed $value
      */
     public function set(string $key, mixed $value): static
     {
         $this->data[$key] = $value;
+
         return $this;
     }
 
     /**
      * Add a value to an array property (e.g. author, image, sameAs…).
-     *
-     * @param mixed $value
      */
     public function append(string $key, mixed $value): static
     {
         if (! isset($this->data[$key])) {
             $this->data[$key] = [];
         }
-        if (! is_array($this->data[$key])) {
+
+        if (! \is_array($this->data[$key])) {
             $this->data[$key] = [$this->data[$key]];
         }
         $this->data[$key][] = $value;
+
         return $this;
     }
 
@@ -144,6 +143,7 @@ abstract class AbstractSchema implements SchemaInterface
     {
         $arr = $this->toArray();
         unset($arr['@context']);
+
         return $arr;
     }
 
@@ -154,10 +154,12 @@ abstract class AbstractSchema implements SchemaInterface
     {
         $this->validate();
         $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR;
+
         if (! $minify) {
             $flags |= JSON_PRETTY_PRINT;
         }
-        return '<script type="application/ld+json">' . json_encode($this->toArray(), $flags) . '</script>';
+
+        return '<script type="application/ld+json">' . \json_encode($this->toArray(), $flags) . '</script>';
     }
 
     // ── Validation ────────────────────────────────────────────────────────────
@@ -169,6 +171,7 @@ abstract class AbstractSchema implements SchemaInterface
     public function validate(): void
     {
         $missing = [];
+
         foreach ($this->requiredFields() as $field) {
             if (! isset($this->data[$field]) || $this->data[$field] === '' || $this->data[$field] === []) {
                 $missing[] = $field;
@@ -179,15 +182,15 @@ abstract class AbstractSchema implements SchemaInterface
             return;
         }
 
-        $message = sprintf(
+        $message = \sprintf(
             '[SEOTools] %s schema is missing required field(s): %s. '
             . 'Google may not display rich results without them.',
             $this->schemaType(),
-            implode(', ', $missing)
+            \implode(', ', $missing),
         );
 
         if (ENVIRONMENT !== 'production') {
-            throw new InvalidArgumentException($message);
+            throw new \InvalidArgumentException($message);
         }
 
         log_message('warning', $message); // @phpstan-ignore-line
@@ -202,31 +205,31 @@ abstract class AbstractSchema implements SchemaInterface
      */
     public function __call(string $method, array $args): mixed
     {
-        if (str_starts_with($method, 'set') && count($args) === 1) {
-            $property = lcfirst(substr($method, 3));
+        if (\str_starts_with($method, 'set') && \count($args) === 1) {
+            $property = \lcfirst(\substr($method, 3));
+
             return $this->set($property, $args[0]);
         }
 
         throw new \BadMethodCallException(
-            sprintf('Method %s::%s() does not exist.', static::class, $method)
+            \sprintf('Method %s::%s() does not exist.', static::class, $method),
         );
     }
 
     /**
      * Recursively resolve AbstractSchema instances to arrays.
      * Handles scalars, single schema objects, and arrays containing schema objects.
-     *
-     * @param mixed $value
-     * @return mixed
      */
     protected function resolveValue(mixed $value): mixed
     {
         if ($value instanceof self) {
             return $value->toEmbeddedArray();
         }
-        if (is_array($value)) {
-            return array_map(fn($v) => $this->resolveValue($v), $value);
+
+        if (\is_array($value)) {
+            return \array_map(fn ($v) => $this->resolveValue($v), $value);
         }
+
         return $value;
     }
 
@@ -238,6 +241,7 @@ abstract class AbstractSchema implements SchemaInterface
     {
         $this->data = [];
         $this->id   = null;
+
         return $this;
     }
 

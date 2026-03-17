@@ -13,7 +13,7 @@ interface SitemapInterface
 {
     /**
      * @param array<array<string,string>> $images
-     * @param array<string,mixed>|null    $video
+     * @param array<string,mixed>|null $video
      */
     public function addUrl(
         string  $loc,
@@ -21,7 +21,7 @@ interface SitemapInterface
         ?string $priority   = null,
         ?string $lastmod    = null,
         array   $images     = [],
-        ?array  $video      = null
+        ?array  $video      = null,
     ): static;
 
     /** @param array<string> $urls */

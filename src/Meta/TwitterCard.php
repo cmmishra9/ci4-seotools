@@ -32,10 +32,11 @@ class TwitterCard implements TwitterCardInterface
     public function addValue(string $key, array|string $value): static
     {
         // Guard: strip leading 'twitter:' prefix — added automatically in generate()
-        if (str_starts_with($key, 'twitter:')) {
-            $key = substr($key, 8);
+        if (\str_starts_with($key, 'twitter:')) {
+            $key = \substr($key, 8);
         }
         $this->values[$key] = $value;
+
         return $this;
     }
 
@@ -84,7 +85,7 @@ class TwitterCard implements TwitterCardInterface
         $html = [];
 
         foreach ($this->values as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 foreach ($value as $val) {
                     $html[] = $this->metaNameTag('twitter:' . $key, (string) $val);
                 }
@@ -99,6 +100,7 @@ class TwitterCard implements TwitterCardInterface
     public function reset(): static
     {
         $this->values = [];
+
         return $this;
     }
 

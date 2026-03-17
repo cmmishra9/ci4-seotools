@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace RcsCodes\SEOTools\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
-use RcsCodes\SEOTools\Meta\SEOMeta;
-use RcsCodes\SEOTools\Meta\OpenGraph;
-use RcsCodes\SEOTools\Meta\TwitterCard;
 use RcsCodes\SEOTools\Meta\JsonLd;
+use RcsCodes\SEOTools\Meta\OpenGraph;
+use RcsCodes\SEOTools\Meta\SEOMeta;
+use RcsCodes\SEOTools\Meta\TwitterCard;
 use RcsCodes\SEOTools\Schema\SchemaGraph;
 use RcsCodes\SEOTools\Schema\Types\Article;
 use RcsCodes\SEOTools\Schema\Types\BreadcrumbList;
-use RcsCodes\SEOTools\SEOTools;
-use RcsCodes\SEOTools\Technical\Sitemap;
-use RcsCodes\SEOTools\Technical\RobotsTxt;
 use RcsCodes\SEOTools\Schema\Types\Offer;
 use RcsCodes\SEOTools\Schema\Types\Product;
+use RcsCodes\SEOTools\SEOTools;
+use RcsCodes\SEOTools\Technical\RobotsTxt;
+use RcsCodes\SEOTools\Technical\Sitemap;
 
 /**
  * Integration tests — exercise complete real-world flows without mocks.
@@ -49,7 +49,8 @@ class FullPipelineTest extends TestCase
         $seo->setTitle('Hello World')
             ->setDescription('My first blog post about PHP.')
             ->setCanonical('https://example.com/blog/hello-world')
-            ->addImages('https://example.com/img/hello.jpg');
+            ->addImages('https://example.com/img/hello.jpg')
+        ;
 
         $seo->metatags()->setTitleDefault('My Blog')->setRobots('index, follow');
         $seo->opengraph()->setType('article')->setSiteName('My Blog');
@@ -68,8 +69,8 @@ class FullPipelineTest extends TestCase
         // ── Canonical URL set once, propagated correctly ──────────────────────
         $this->assertSame(
             1,
-            substr_count($html, 'rel="canonical"'),
-            'Exactly one canonical link tag expected'
+            \substr_count($html, 'rel="canonical"'),
+            'Exactly one canonical link tag expected',
         );
         $this->assertStringContainsString('href="https://example.com/blog/hello-world"', $html);
 
@@ -95,15 +96,16 @@ class FullPipelineTest extends TestCase
         $html = $seo->generate();
 
         // Extract and validate all JSON-LD blocks
-        preg_match_all(
+        \preg_match_all(
             '/<script type="application\/ld\+json">(.*?)<\/script>/s',
             $html,
-            $matches
+            $matches,
         );
 
         $this->assertNotEmpty($matches[1], 'Expected at least one JSON-LD block');
+
         foreach ($matches[1] as $jsonBlock) {
-            $decoded = json_decode(trim($jsonBlock), true);
+            $decoded = \json_decode(\trim($jsonBlock), true);
             $this->assertNotNull($decoded, 'JSON-LD block must decode to valid JSON: ' . $jsonBlock);
         }
     }
@@ -120,35 +122,37 @@ class FullPipelineTest extends TestCase
 
         $offer->setPrice(29.99)->setPriceCurrency('GBP')->setAvailability('InStock');
         $product->setName('Super Widget')
-                ->setDescription('The best widget.')
-                ->setImage('https://example.com/widget.jpg')
-                ->setOffers($offer)
-                ->setSku('WGT-001');
+            ->setDescription('The best widget.')
+            ->setImage('https://example.com/widget.jpg')
+            ->setOffers($offer)
+            ->setSku('WGT-001')
+        ;
 
         $bc->addItem('Home', 'https://example.com/')
-           ->addItem('Products', 'https://example.com/products/')
-           ->addItem('Super Widget', 'https://example.com/products/super-widget');
+            ->addItem('Products', 'https://example.com/products/')
+            ->addItem('Super Widget', 'https://example.com/products/super-widget')
+        ;
 
         $graph = new SchemaGraph();
         $graph->add($product)->add($bc);
 
         $output = $graph->generate();
-        $data   = json_decode(strip_tags($output), true);
+        $data   = \json_decode(\strip_tags($output), true);
 
         $this->assertArrayHasKey('@graph', $data);
         $this->assertCount(2, $data['@graph']);
 
-        $types = array_column($data['@graph'], '@type');
+        $types = \array_column($data['@graph'], '@type');
         $this->assertContains('Product', $types);
         $this->assertContains('BreadcrumbList', $types);
 
         // Offer embedded correctly — no @context in nested item
-        $productNode = $data['@graph'][array_search('Product', $types)];
+        $productNode = $data['@graph'][\array_search('Product', $types, true)];
         $this->assertSame('Offer', $productNode['offers']['@type']);
         $this->assertArrayNotHasKey('@context', $productNode['offers']);
 
         // BreadcrumbList has 3 items
-        $bcNode = $data['@graph'][array_search('BreadcrumbList', $types)];
+        $bcNode = $data['@graph'][\array_search('BreadcrumbList', $types, true)];
         $this->assertCount(3, $bcNode['itemListElement']);
     }
 
@@ -165,13 +169,14 @@ class FullPipelineTest extends TestCase
             ->addUrl('https://example.com/low-priority', 'yearly', '0')  // P0 fix
             ->addUrl(
                 'https://example.com/gallery',
-                images: [['loc' => 'https://example.com/hero.jpg', 'caption' => 'Hero']]
+                images: [['loc' => 'https://example.com/hero.jpg', 'caption' => 'Hero']],
             )
             ->addUrl('https://example.com/video', video: [
                 'thumbnail_loc' => 'https://example.com/thumb.jpg',
                 'title'         => 'Demo',
                 'description'   => 'Watch.',
-            ]);
+            ])
+        ;
 
         $xml = $sitemap->toXml();
 
@@ -206,11 +211,12 @@ class FullPipelineTest extends TestCase
     {
         $robots = new RobotsTxt();
         $robots->allow('*', '/')
-               ->disallow('*', '/admin/')
-               ->disallow('*', '/private/')
-               ->crawlDelay('Googlebot', 1)
-               ->allowRetrievalBlockTraining()
-               ->addSitemap('https://example.com/sitemap.xml');
+            ->disallow('*', '/admin/')
+            ->disallow('*', '/private/')
+            ->crawlDelay('Googlebot', 1)
+            ->allowRetrievalBlockTraining()
+            ->addSitemap('https://example.com/sitemap.xml')
+        ;
 
         $output = $robots->generate();
 
@@ -229,10 +235,12 @@ class FullPipelineTest extends TestCase
         // Parse into blocks and verify structure
         $blocks = [];
         $current = null;
-        foreach (explode("\n", $output) as $line) {
-            $line = trim($line);
-            if (str_starts_with($line, 'User-agent:')) {
-                $current = substr($line, 12);
+
+        foreach (\explode("\n", $output) as $line) {
+            $line = \trim($line);
+
+            if (\str_starts_with($line, 'User-agent:')) {
+                $current = \substr($line, 12);
                 $blocks[$current] = [];
             } elseif ($current && $line !== '') {
                 $blocks[$current][] = $line;
@@ -261,7 +269,7 @@ class FullPipelineTest extends TestCase
         // og:title
         $this->assertStringContainsString('content="Propagation Test"', $html);
         // twitter:title
-        $surfaces = substr_count($html, 'Propagation Test');
+        $surfaces = \substr_count($html, 'Propagation Test');
         // Appears in: <title>, og:title meta, twitter:title meta, JSON-LD name
         $this->assertGreaterThanOrEqual(4, $surfaces);
     }
@@ -305,7 +313,8 @@ class FullPipelineTest extends TestCase
         $seo = new SEOTools();
         $seo->setTitle('Minify Test')
             ->setDescription('Minified description.')
-            ->setCanonical('https://example.com/');
+            ->setCanonical('https://example.com/')
+        ;
 
         $seo->metatags()->setRobots('index, follow');
         $seo->opengraph()->setType('website');
@@ -316,7 +325,7 @@ class FullPipelineTest extends TestCase
 
         $this->assertStringNotContainsString("\n", $minified);
         $this->assertStringContainsString("\n", $pretty);
-        $this->assertLessThan(strlen($pretty), strlen($minified));
+        $this->assertLessThan(\strlen($pretty), \strlen($minified));
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -325,11 +334,11 @@ class FullPipelineTest extends TestCase
 
     public function testGlobalHelpersReturnCorrectTypes(): void
     {
-        $this->assertInstanceOf(SEOTools::class,   seo());
-        $this->assertInstanceOf(SEOMeta::class,    seo_meta());
-        $this->assertInstanceOf(OpenGraph::class,  seo_og());
+        $this->assertInstanceOf(SEOTools::class, seo());
+        $this->assertInstanceOf(SEOMeta::class, seo_meta());
+        $this->assertInstanceOf(OpenGraph::class, seo_og());
         $this->assertInstanceOf(TwitterCard::class, seo_twitter());
-        $this->assertInstanceOf(JsonLd::class,     seo_jsonld());
+        $this->assertInstanceOf(JsonLd::class, seo_jsonld());
     }
 
     public function testSeoGenerateHelperOutputsHtml(): void

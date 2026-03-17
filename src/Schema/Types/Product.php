@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace RcsCodes\SEOTools\Schema\Types;
 
 use RcsCodes\SEOTools\Schema\AbstractSchema;
-use RcsCodes\SEOTools\Schema\Types\Offer;
 
 class Product extends AbstractSchema
 {
-    protected function schemaType(): string { return 'Product'; }
+    protected function schemaType(): string
+    {
+        return 'Product';
+    }
 
     protected function requiredFields(): array
     {
@@ -22,6 +24,7 @@ class Product extends AbstractSchema
         if ($offer instanceof Offer) {
             $offer = $offer->toEmbeddedArray();
         }
+
         return $this->set('offers', $offer);
     }
 

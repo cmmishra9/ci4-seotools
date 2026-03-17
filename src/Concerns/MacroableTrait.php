@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace RcsCodes\SEOTools\Concerns;
 
-use BadMethodCallException;
-use Closure;
-
 /**
  * Allows any class to accept runtime-defined methods (macros).
  *
@@ -16,13 +13,13 @@ use Closure;
  */
 trait MacroableTrait
 {
-    /** @var array<string, Closure> */
+    /** @var array<string, \Closure> */
     protected static array $macros = [];
 
     /**
      * Register a named macro.
      */
-    public static function macro(string $name, Closure $callback): void
+    public static function macro(string $name, \Closure $callback): void
     {
         static::$macros[$name] = $callback;
     }
@@ -51,12 +48,13 @@ trait MacroableTrait
     public function __call(string $method, array $arguments): mixed
     {
         if (isset(static::$macros[$method])) {
-            $closure = Closure::bind(static::$macros[$method], $this, static::class);
+            $closure = \Closure::bind(static::$macros[$method], $this, static::class);
+
             return $closure(...$arguments);
         }
 
-        throw new BadMethodCallException(
-            sprintf('Method %s::%s() does not exist.', static::class, $method)
+        throw new \BadMethodCallException(
+            \sprintf('Method %s::%s() does not exist.', static::class, $method),
         );
     }
 
@@ -68,12 +66,13 @@ trait MacroableTrait
     public static function __callStatic(string $method, array $arguments): mixed
     {
         if (isset(static::$macros[$method])) {
-            $closure = Closure::bind(static::$macros[$method], null, static::class);
+            $closure = \Closure::bind(static::$macros[$method], null, static::class);
+
             return $closure(...$arguments);
         }
 
-        throw new BadMethodCallException(
-            sprintf('Static method %s::%s() does not exist.', static::class, $method)
+        throw new \BadMethodCallException(
+            \sprintf('Static method %s::%s() does not exist.', static::class, $method),
         );
     }
 }

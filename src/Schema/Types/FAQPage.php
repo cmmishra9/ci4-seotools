@@ -8,14 +8,18 @@ use RcsCodes\SEOTools\Schema\AbstractSchema;
 
 class FAQPage extends AbstractSchema
 {
-    protected function schemaType(): string { return 'FAQPage'; }
+    protected function schemaType(): string
+    {
+        return 'FAQPage';
+    }
 
     /** @var array<array<string,mixed>> */
-        private array $questions = [];
+    private array $questions = [];
 
     public function reset(): static
     {
         $this->questions = [];
+
         return parent::reset();
     }
 
@@ -29,6 +33,7 @@ class FAQPage extends AbstractSchema
                 'text'  => $answer,
             ],
         ];
+
         return $this;
     }
 
@@ -36,6 +41,7 @@ class FAQPage extends AbstractSchema
     {
         $arr = parent::toArray();
         $arr['mainEntity'] = $this->questions;
+
         return $arr;
     }
 }

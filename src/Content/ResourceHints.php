@@ -33,7 +33,7 @@ class ResourceHints
      * Preload: high-priority fetch before the browser discovers the resource.
      * Use for LCP images, critical fonts, key scripts.
      *
-     * @param array<string,string> $attrs  e.g. ['crossorigin'=>'anonymous','type'=>'font/woff2']
+     * @param array<string,string> $attrs e.g. ['crossorigin'=>'anonymous','type'=>'font/woff2']
      */
     public function preload(string $href, string $as, array $attrs = []): static
     {
@@ -54,7 +54,7 @@ class ResourceHints
      * Preconnect: establish a connection (DNS + TCP + TLS) to an origin early.
      * Best for third-party origins used on every page (fonts, analytics, CDN).
      *
-     * @param array<string,string> $attrs  e.g. ['crossorigin' => ''] for CORS origins
+     * @param array<string,string> $attrs e.g. ['crossorigin' => ''] for CORS origins
      */
     public function preconnect(string $href, array $attrs = []): static
     {
@@ -88,8 +88,9 @@ class ResourceHints
 
         foreach ($this->hints as $hint) {
             $extras = $hint['attrs'];
+
             if ($hint['as'] !== null) {
-                $extras = array_merge(['as' => $hint['as']], $extras);
+                $extras = \array_merge(['as' => $hint['as']], $extras);
             }
             $html[] = $this->linkTag($hint['type'], $hint['href'], $extras);
         }
@@ -100,6 +101,7 @@ class ResourceHints
     public function reset(): static
     {
         $this->hints = [];
+
         return $this;
     }
 
@@ -108,7 +110,8 @@ class ResourceHints
     /** @param array<string,string> $attrs */
     protected function addHint(string $type, string $href, ?string $as, array $attrs): static
     {
-        $this->hints[] = compact('type', 'href', 'as', 'attrs');
+        $this->hints[] = \compact('type', 'href', 'as', 'attrs');
+
         return $this;
     }
 }

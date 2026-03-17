@@ -8,7 +8,10 @@ use RcsCodes\SEOTools\Schema\AbstractSchema;
 
 class Offer extends AbstractSchema
 {
-    protected function schemaType(): string { return 'Offer'; }
+    protected function schemaType(): string
+    {
+        return 'Offer';
+    }
 
     public function setPrice(float|string $price): static
     {
@@ -22,7 +25,7 @@ class Offer extends AbstractSchema
 
     public function setAvailability(string $availability): static
     {
-        return $this->set('availability', 'https://schema.org/' . ltrim($availability, '/'));
+        return $this->set('availability', 'https://schema.org/' . \ltrim($availability, '/'));
     }
 
     public function setPriceValidUntil(string $date): static

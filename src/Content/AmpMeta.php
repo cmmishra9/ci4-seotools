@@ -37,12 +37,14 @@ class AmpMeta
     public function setAmpUrl(string $url): static
     {
         $this->ampUrl = $url;
+
         return $this;
     }
 
     public function setCanonicalUrl(string $url): static
     {
         $this->canonicalUrl = $url;
+
         return $this;
     }
 
@@ -55,6 +57,7 @@ class AmpMeta
         if ($this->ampUrl === null) {
             return '';
         }
+
         return $this->linkTag('amphtml', $this->ampUrl);
     }
 
@@ -67,6 +70,7 @@ class AmpMeta
         if ($this->canonicalUrl === null) {
             return '';
         }
+
         return $this->linkTag('canonical', $this->canonicalUrl);
     }
 
@@ -74,6 +78,7 @@ class AmpMeta
     {
         $this->ampUrl       = null;
         $this->canonicalUrl = null;
+
         return $this;
     }
 }

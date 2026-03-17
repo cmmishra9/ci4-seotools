@@ -8,7 +8,10 @@ use RcsCodes\SEOTools\Schema\AbstractSchema;
 
 class Recipe extends AbstractSchema
 {
-    protected function schemaType(): string { return 'Recipe'; }
+    protected function schemaType(): string
+    {
+        return 'Recipe';
+    }
 
     protected function requiredFields(): array
     {
@@ -55,7 +58,7 @@ class Recipe extends AbstractSchema
     /** @param array<string, mixed> $nutrition */
     public function setNutrition(array $nutrition): static
     {
-        return $this->set('nutrition', array_merge(['@type' => 'NutritionInformation'], $nutrition));
+        return $this->set('nutrition', \array_merge(['@type' => 'NutritionInformation'], $nutrition));
     }
 
     public function setAggregateRating(float $value, int $count): static

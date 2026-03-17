@@ -32,13 +32,14 @@ class NewsArticle extends AbstractSchema
     }
 
     /**
-     * @param string|array<string,mixed> $author  Name or Person array.
+     * @param string|array<string,mixed> $author Name or Person array.
      */
     public function setAuthor(string|array $author): static
     {
-        if (is_string($author)) {
+        if (\is_string($author)) {
             $author = ['@type' => 'Person', 'name' => $author];
         }
+
         return $this->set('author', $author);
     }
 
@@ -53,13 +54,14 @@ class NewsArticle extends AbstractSchema
     }
 
     /**
-     * @param string|array<string,mixed> $publisher  Name or Organization/NewsMediaOrganization array.
+     * @param string|array<string,mixed> $publisher Name or Organization/NewsMediaOrganization array.
      */
     public function setPublisher(string|array $publisher): static
     {
-        if (is_string($publisher)) {
+        if (\is_string($publisher)) {
             $publisher = ['@type' => 'NewsMediaOrganization', 'name' => $publisher];
         }
+
         return $this->set('publisher', $publisher);
     }
 
@@ -91,7 +93,7 @@ class NewsArticle extends AbstractSchema
     {
         return $this->set(
             'keywords',
-            is_array($keywords) ? implode(', ', $keywords) : $keywords
+            \is_array($keywords) ? \implode(', ', $keywords) : $keywords,
         );
     }
 }

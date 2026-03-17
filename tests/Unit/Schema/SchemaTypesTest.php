@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace RcsCodes\SEOTools\Tests\Unit\Schema;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RcsCodes\SEOTools\Schema\AbstractSchema;
 use RcsCodes\SEOTools\Schema\SchemaGraph;
@@ -94,7 +93,7 @@ class SchemaTypesTest extends TestCase
 
     public function testValidationThrowsInTesting(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/headline/');
         (new Article())->validate(); // missing headline, author, datePublished
     }
@@ -115,7 +114,8 @@ class SchemaTypesTest extends TestCase
         $offer->setPrice(9.99)->setPriceCurrency('USD');
         $product = new Product();
         $product->setName('Widget')->setDescription('A widget')->setImage('img.jpg')
-                ->setOffers($offer);
+            ->setOffers($offer)
+        ;
         $arr = $product->toArray();
         $this->assertIsArray($arr['offers']);
         $this->assertSame('Offer', $arr['offers']['@type']);
@@ -154,7 +154,7 @@ class SchemaTypesTest extends TestCase
     {
         $art = new Article();
         $art->setHeadline('Breaking News')->setAuthor('Jane')->setDatePublished('2024-06-01');
-        $data = json_decode(strip_tags($art->generate()), true);
+        $data = \json_decode(\strip_tags($art->generate()), true);
         $this->assertSame('Breaking News', $data['headline']);
         $this->assertSame('Jane', $data['author']);
     }
@@ -173,13 +173,15 @@ class SchemaTypesTest extends TestCase
         $offer = (new Offer())
             ->setPrice(29.99)
             ->setPriceCurrency('GBP')
-            ->setAvailability('InStock');
+            ->setAvailability('InStock')
+        ;
         $product = (new Product())
             ->setName('Widget')
             ->setDescription('A fancy widget')
             ->setImage('https://example.com/img.jpg')
-            ->setOffers($offer);
-        $data = json_decode(strip_tags($product->generate()), true);
+            ->setOffers($offer)
+        ;
+        $data = \json_decode(\strip_tags($product->generate()), true);
         $this->assertSame('Widget', $data['name']);
         $this->assertSame('Offer', $data['offers']['@type']);
         $this->assertSame('GBP', $data['offers']['priceCurrency']);
@@ -200,9 +202,10 @@ class SchemaTypesTest extends TestCase
     {
         $bc = new BreadcrumbList();
         $bc->addItem('Home', 'https://example.com/')
-           ->addItem('Blog', 'https://example.com/blog/')
-           ->addItem('Post', 'https://example.com/blog/post');
-        $data = json_decode(strip_tags($bc->generate()), true);
+            ->addItem('Blog', 'https://example.com/blog/')
+            ->addItem('Post', 'https://example.com/blog/post')
+        ;
+        $data = \json_decode(\strip_tags($bc->generate()), true);
         $this->assertCount(3, $data['itemListElement']);
         $this->assertSame(1, $data['itemListElement'][0]['position']);
         $this->assertSame('Blog', $data['itemListElement'][1]['name']);
@@ -214,7 +217,7 @@ class SchemaTypesTest extends TestCase
         $bc = new BreadcrumbList();
         $bc->addItem('Home', 'https://example.com/');
         $bc->reset();
-        $data = json_decode(strip_tags($bc->generate()), true);
+        $data = \json_decode(\strip_tags($bc->generate()), true);
         $this->assertEmpty($data['itemListElement']);
     }
 
@@ -224,8 +227,9 @@ class SchemaTypesTest extends TestCase
     {
         $faq = new FAQPage();
         $faq->addQuestion('What is PHP?', 'A server-side scripting language.')
-            ->addQuestion('What is CI4?', 'CodeIgniter 4 framework.');
-        $data = json_decode(strip_tags($faq->generate()), true);
+            ->addQuestion('What is CI4?', 'CodeIgniter 4 framework.')
+        ;
+        $data = \json_decode(\strip_tags($faq->generate()), true);
         $this->assertCount(2, $data['mainEntity']);
         $this->assertSame('Question', $data['mainEntity'][0]['@type']);
     }
@@ -236,7 +240,7 @@ class SchemaTypesTest extends TestCase
         $faq = new FAQPage();
         $faq->addQuestion('Q?', 'A.');
         $faq->reset();
-        $data = json_decode(strip_tags($faq->generate()), true);
+        $data = \json_decode(\strip_tags($faq->generate()), true);
         $this->assertEmpty($data['mainEntity']);
     }
 
@@ -247,8 +251,9 @@ class SchemaTypesTest extends TestCase
         $how = new HowTo();
         $how->setName('How to bake')->setDescription('Simple guide')
             ->addStep('Mix', 'Mix the ingredients.')
-            ->addStep('Bake', 'Bake at 180°C for 30 min.');
-        $data = json_decode(strip_tags($how->generate()), true);
+            ->addStep('Bake', 'Bake at 180°C for 30 min.')
+        ;
+        $data = \json_decode(\strip_tags($how->generate()), true);
         $this->assertCount(2, $data['step']);
     }
 
@@ -268,9 +273,10 @@ class SchemaTypesTest extends TestCase
     {
         $event = new Event();
         $event->setName('PHP Conference')
-              ->setStartDate('2025-09-01T09:00:00')
-              ->setLocation('ExCeL London');
-        $data = json_decode(strip_tags($event->generate()), true);
+            ->setStartDate('2025-09-01T09:00:00')
+            ->setLocation('ExCeL London')
+        ;
+        $data = \json_decode(\strip_tags($event->generate()), true);
         $this->assertSame('Place', $data['location']['@type']);
         $this->assertSame('ExCeL London', $data['location']['name']);
     }
@@ -305,8 +311,9 @@ class SchemaTypesTest extends TestCase
             ->setHiringOrganization('Acme', 'https://acme.com')
             ->setDatePosted('2024-06-01')
             ->setJobLocation('London', 'GB')
-            ->setRemote();
-        $data = json_decode(strip_tags($job->generate()), true);
+            ->setRemote()
+        ;
+        $data = \json_decode(\strip_tags($job->generate()), true);
         $this->assertSame('TELECOMMUTE', $data['jobLocationType']);
     }
 
@@ -316,11 +323,12 @@ class SchemaTypesTest extends TestCase
     {
         $recipe = new Recipe();
         $recipe->setName('Pasta')->setImage('img.jpg')->setAuthor('Chef')
-               ->setDatePublished('2024-01-01')->setDescription('Tasty pasta.')
-               ->setPrepTime('PT15M')->setCookTime('PT10M')
-               ->setRecipeIngredient(['200g pasta', '100g sauce'])
-               ->setRecipeYield('2 servings');
-        $data = json_decode(strip_tags($recipe->generate()), true);
+            ->setDatePublished('2024-01-01')->setDescription('Tasty pasta.')
+            ->setPrepTime('PT15M')->setCookTime('PT10M')
+            ->setRecipeIngredient(['200g pasta', '100g sauce'])
+            ->setRecipeYield('2 servings')
+        ;
+        $data = \json_decode(\strip_tags($recipe->generate()), true);
         $this->assertSame('Person', $data['author']['@type']);
         $this->assertCount(2, $data['recipeIngredient']);
     }
@@ -331,11 +339,12 @@ class SchemaTypesTest extends TestCase
     {
         $video = new VideoObject();
         $video->setName('Demo')->setDescription('Watch this.')
-              ->setThumbnailUrl('https://example.com/thumb.jpg')
-              ->setUploadDate('2024-01-01')
-              ->setDuration('PT4M30S')
-              ->setContentUrl('https://example.com/video.mp4');
-        $data = json_decode(strip_tags($video->generate()), true);
+            ->setThumbnailUrl('https://example.com/thumb.jpg')
+            ->setUploadDate('2024-01-01')
+            ->setDuration('PT4M30S')
+            ->setContentUrl('https://example.com/video.mp4')
+        ;
+        $data = \json_decode(\strip_tags($video->generate()), true);
         $this->assertSame('PT4M30S', $data['duration']);
     }
 
@@ -345,11 +354,12 @@ class SchemaTypesTest extends TestCase
     {
         $course = new Course();
         $course->setName('CI4 Mastery')
-               ->setDescription('Master CodeIgniter 4.')
-               ->setProvider('Acme Academy', 'https://acme.com')
-               ->setEducationalLevel('Intermediate')
-               ->setTimeRequired('PT6H');
-        $data = json_decode(strip_tags($course->generate()), true);
+            ->setDescription('Master CodeIgniter 4.')
+            ->setProvider('Acme Academy', 'https://acme.com')
+            ->setEducationalLevel('Intermediate')
+            ->setTimeRequired('PT6H')
+        ;
+        $data = \json_decode(\strip_tags($course->generate()), true);
         $this->assertSame('Course', $data['@type']);
         $this->assertSame('Organization', $data['provider']['@type']);
         $this->assertSame('Intermediate', $data['educationalLevel']);
@@ -366,7 +376,7 @@ class SchemaTypesTest extends TestCase
 
     public function testCourseValidationRequiresProvider(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/provider/');
         (new Course())->setName('X')->setDescription('Y')->validate();
     }
@@ -377,11 +387,12 @@ class SchemaTypesTest extends TestCase
     {
         $review = new Review();
         $review->setItemReviewed('My PHP Book')
-               ->setReviewRating(4.5)
-               ->setAuthor('Jane Doe')
-               ->setReviewBody('Excellent read.')
-               ->setDatePublished('2024-06-01');
-        $data = json_decode(strip_tags($review->generate()), true);
+            ->setReviewRating(4.5)
+            ->setAuthor('Jane Doe')
+            ->setReviewBody('Excellent read.')
+            ->setDatePublished('2024-06-01')
+        ;
+        $data = \json_decode(\strip_tags($review->generate()), true);
         $this->assertSame('Review', $data['@type']);
         $this->assertSame('Rating', $data['reviewRating']['@type']);
         $this->assertSame(4.5, $data['reviewRating']['ratingValue']);
@@ -393,7 +404,8 @@ class SchemaTypesTest extends TestCase
         $review = (new Review())
             ->setItemReviewed(['@type' => 'Product', 'name' => 'Widget'])
             ->setReviewRating(5.0)
-            ->setAuthor('Bob');
+            ->setAuthor('Bob')
+        ;
         $arr = $review->toArray();
         $this->assertSame('Product', $arr['itemReviewed']['@type']);
     }
@@ -404,12 +416,13 @@ class SchemaTypesTest extends TestCase
     {
         $na = new NewsArticle();
         $na->setHeadline('Breaking: PHP 9 Released')
-           ->setImage('https://example.com/img.jpg')
-           ->setDatePublished('2025-01-01')
-           ->setAuthor('Reporter')
-           ->setPublisher('The Daily PHP')
-           ->setArticleSection('Technology');
-        $data = json_decode(strip_tags($na->generate()), true);
+            ->setImage('https://example.com/img.jpg')
+            ->setDatePublished('2025-01-01')
+            ->setAuthor('Reporter')
+            ->setPublisher('The Daily PHP')
+            ->setArticleSection('Technology')
+        ;
+        $data = \json_decode(\strip_tags($na->generate()), true);
         $this->assertSame('NewsArticle', $data['@type']);
         $this->assertSame('NewsMediaOrganization', $data['publisher']['@type']);
         $this->assertSame('Technology', $data['articleSection']);
@@ -425,8 +438,9 @@ class SchemaTypesTest extends TestCase
             ->setApplicationCategory('UtilitiesApplication')
             ->setSoftwareVersion('1.0.0')
             ->setOffers('Free')
-            ->setAggregateRating(4.8, 250);
-        $data = json_decode(strip_tags($app->generate()), true);
+            ->setAggregateRating(4.8, 250)
+        ;
+        $data = \json_decode(\strip_tags($app->generate()), true);
         $this->assertSame('SoftwareApplication', $data['@type']);
         $this->assertSame('1.0.0', $data['softwareVersion']);
         $this->assertSame('0', $data['offers']['price']);
@@ -444,11 +458,11 @@ class SchemaTypesTest extends TestCase
         $graph = new SchemaGraph();
         $graph->add($art)->add($bc)->add($org);
 
-        $data = json_decode(strip_tags($graph->generate()), true);
+        $data = \json_decode(\strip_tags($graph->generate()), true);
         $this->assertArrayHasKey('@graph', $data);
         $this->assertCount(3, $data['@graph']);
 
-        $types = array_column($data['@graph'], '@type');
+        $types = \array_column($data['@graph'], '@type');
         $this->assertContains('Article', $types);
         $this->assertContains('BreadcrumbList', $types);
         $this->assertContains('Organization', $types);
@@ -457,8 +471,9 @@ class SchemaTypesTest extends TestCase
     public function testSchemaGraphEmbeddedItemsHaveNoContext(): void
     {
         $graph = (new SchemaGraph())
-            ->add((new Article())->setHeadline('H')->setAuthor('A')->setDatePublished('2024-01-01'));
-        $data = json_decode(strip_tags($graph->generate()), true);
+            ->add((new Article())->setHeadline('H')->setAuthor('A')->setDatePublished('2024-01-01'))
+        ;
+        $data = \json_decode(\strip_tags($graph->generate()), true);
         $this->assertArrayNotHasKey('@context', $data['@graph'][0]);
     }
 
@@ -483,8 +498,8 @@ class SchemaTypesTest extends TestCase
     public function testGenerateProducesValidJson(): void
     {
         $art = (new Article())->setHeadline('H')->setAuthor('A')->setDatePublished('2024-01-01');
-        $json = strip_tags($art->generate());
-        $decoded = json_decode($json, true, flags: JSON_THROW_ON_ERROR);
+        $json = \strip_tags($art->generate());
+        $decoded = \json_decode($json, true, flags: JSON_THROW_ON_ERROR);
         $this->assertIsArray($decoded);
     }
 }

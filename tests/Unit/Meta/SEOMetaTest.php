@@ -202,7 +202,8 @@ class SEOMetaTest extends TestCase
     public function testSetAlternateLanguagesReplacesAll(): void
     {
         $this->meta->addAlternateLanguage('fr', 'https://fr.example.com/')
-                   ->setAlternateLanguage('de', 'https://de.example.com/');
+            ->setAlternateLanguage('de', 'https://de.example.com/')
+        ;
         $html = $this->meta->generate();
         $this->assertStringNotContainsString('hreflang="fr"', $html);
         $this->assertStringContainsString('hreflang="de"', $html);

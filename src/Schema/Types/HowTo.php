@@ -8,9 +8,15 @@ use RcsCodes\SEOTools\Schema\AbstractSchema;
 
 class HowTo extends AbstractSchema
 {
-    protected function schemaType(): string { return 'HowTo'; }
+    protected function schemaType(): string
+    {
+        return 'HowTo';
+    }
 
-    protected function requiredFields(): array { return ['name', 'step']; }
+    protected function requiredFields(): array
+    {
+        return ['name', 'step'];
+    }
 
 
     public function reset(): static
@@ -21,6 +27,7 @@ class HowTo extends AbstractSchema
     public function addStep(string $name, string $text, ?string $image = null): static
     {
         $step = ['@type' => 'HowToStep', 'name' => $name, 'text' => $text];
+
         if ($image !== null) {
             $step['image'] = $image;
         }

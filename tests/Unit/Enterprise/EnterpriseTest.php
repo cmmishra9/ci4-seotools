@@ -37,8 +37,9 @@ class EnterpriseTest extends TestCase
         $mgr->blockRetrieval()->blockTraining();
         $rules = $mgr->toRobotsTxtRules();
         $this->assertNotEmpty($rules);
+
         foreach ($rules as $bot => $botRules) {
-            $this->assertStringContainsString('Disallow', implode("\n", $botRules));
+            $this->assertStringContainsString('Disallow', \implode("\n", $botRules));
         }
     }
 
@@ -49,7 +50,7 @@ class EnterpriseTest extends TestCase
         $rules = $mgr->toRobotsTxtRules();
         // GPTBot is a retrieval+training bot — in 'retrieval' preset it should be allowed
         $this->assertArrayHasKey('GPTBot', $rules);
-        $gptRules = implode("\n", $rules['GPTBot']);
+        $gptRules = \implode("\n", $rules['GPTBot']);
         $this->assertStringContainsString('Allow', $gptRules);
     }
 
@@ -58,8 +59,9 @@ class EnterpriseTest extends TestCase
         $mgr = new AiBotManager();
         $mgr->applyPreset('restrictive');
         $rules = $mgr->toRobotsTxtRules();
+
         foreach ($rules as $botRules) {
-            $text = implode("\n", $botRules);
+            $text = \implode("\n", $botRules);
             $this->assertStringContainsString('Disallow', $text);
         }
     }
@@ -83,9 +85,14 @@ class EnterpriseTest extends TestCase
 
     public function testApplyHeadersSetsXRobotsTag(): void
     {
-        $mockResponse = new class {
+        $mockResponse = new class () {
             public array $headers = [];
-            public function setHeader(string $k, string $v): static { $this->headers[$k] = $v; return $this; }
+            public function setHeader(string $k, string $v): static
+            {
+                $this->headers[$k] = $v;
+
+                return $this;
+            }
         };
         $mgr = new AiBotManager();
         $mgr->blockRetrieval();
@@ -106,11 +113,12 @@ class EnterpriseTest extends TestCase
     {
         $eeat = new EEATMarkup();
         $eeat->setAuthor('Jane Doe', 'https://jane.com')
-             ->setAuthorJobTitle('Senior Engineer')
-             ->addAuthorSameAs('https://linkedin.com/in/jane')
-             ->addAuthorCredential('PhD Computer Science');
+            ->setAuthorJobTitle('Senior Engineer')
+            ->addAuthorSameAs('https://linkedin.com/in/jane')
+            ->addAuthorCredential('PhD Computer Science')
+        ;
         $json  = $eeat->generateAuthorSchema();
-        $data  = json_decode(strip_tags($json), true);
+        $data  = \json_decode(\strip_tags($json), true);
         $this->assertSame('Person', $data['@type']);
         $this->assertSame('Jane Doe', $data['name']);
         $this->assertSame('Senior Engineer', $data['jobTitle']);
@@ -121,9 +129,10 @@ class EnterpriseTest extends TestCase
     {
         $eeat = new EEATMarkup();
         $eeat->setOrganization('Acme Corp', 'https://acme.com', 'https://acme.com/logo.png')
-             ->addOrganizationSameAs('https://twitter.com/acme');
+            ->addOrganizationSameAs('https://twitter.com/acme')
+        ;
         $json = $eeat->generateOrganizationSchema();
-        $data = json_decode(strip_tags($json), true);
+        $data = \json_decode(\strip_tags($json), true);
         $this->assertSame('Organization', $data['@type']);
         $this->assertSame('Acme Corp', $data['name']);
     }
@@ -151,7 +160,8 @@ class EnterpriseTest extends TestCase
     {
         $sm = new SpeakableMarkup();
         $sm->addCssSelector('.headline')->addCssSelector('.summary')
-           ->setUrl('https://example.com/article');
+            ->setUrl('https://example.com/article')
+        ;
         $arr = $sm->toArray();
         $this->assertSame('SpeakableSpecification', $arr['@type']);
         $this->assertContains('.headline', $arr['cssSelector']);
@@ -172,7 +182,7 @@ class EnterpriseTest extends TestCase
         $sm->addCssSelector('.article-body');
         $out = $sm->generate();
         $this->assertStringContainsString('<script type="application/ld+json">', $out);
-        $decoded = json_decode(strip_tags($out), true);
+        $decoded = \json_decode(\strip_tags($out), true);
         $this->assertSame('SpeakableSpecification', $decoded['@type']);
     }
 

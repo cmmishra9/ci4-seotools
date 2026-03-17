@@ -67,7 +67,7 @@ class SoftwareApplication extends AbstractSchema
     }
 
     /**
-     * @param 'Free'|'Paid'|string $price  Use 'Free' or numeric string.
+     * @param 'Free'|'Paid'|string $price Use 'Free' or numeric string.
      */
     public function setOffers(string $price, string $currency = 'USD'): static
     {
@@ -102,9 +102,11 @@ class SoftwareApplication extends AbstractSchema
     public function setAuthor(string $name, ?string $url = null): static
     {
         $author = ['@type' => 'Organization', 'name' => $name];
+
         if ($url !== null) {
             $author['url'] = $url;
         }
+
         return $this->set('author', $author);
     }
 }

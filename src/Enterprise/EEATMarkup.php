@@ -51,30 +51,35 @@ class EEATMarkup
     {
         $this->authorName = $name;
         $this->authorUrl  = $url;
+
         return $this;
     }
 
     public function addAuthorSameAs(string $url): static
     {
         $this->authorSameAs[] = $url;
+
         return $this;
     }
 
     public function addAuthorCredential(string $credential): static
     {
         $this->authorCredentials[] = $credential;
+
         return $this;
     }
 
     public function setAuthorImage(string $url): static
     {
         $this->authorImage = $url;
+
         return $this;
     }
 
     public function setAuthorJobTitle(string $title): static
     {
         $this->authorJobTitle = $title;
+
         return $this;
     }
 
@@ -85,12 +90,14 @@ class EEATMarkup
         $this->orgName = $name;
         $this->orgUrl  = $url;
         $this->orgLogo = $logo;
+
         return $this;
     }
 
     public function addOrganizationSameAs(string $url): static
     {
         $this->orgSameAs[] = $url;
+
         return $this;
     }
 
@@ -105,20 +112,28 @@ class EEATMarkup
     {
         $author = ['@type' => 'Person', 'name' => $this->authorName ?? ''];
 
-        if ($this->authorUrl)       $author['url']      = $this->authorUrl;
-        if ($this->authorImage)     $author['image']    = $this->authorImage;
-        if ($this->authorJobTitle)  $author['jobTitle'] = $this->authorJobTitle;
+        if ($this->authorUrl) {
+            $author['url']      = $this->authorUrl;
+        }
+
+        if ($this->authorImage) {
+            $author['image']    = $this->authorImage;
+        }
+
+        if ($this->authorJobTitle) {
+            $author['jobTitle'] = $this->authorJobTitle;
+        }
 
         if (! empty($this->authorSameAs)) {
-            $author['sameAs'] = count($this->authorSameAs) === 1
+            $author['sameAs'] = \count($this->authorSameAs) === 1
                 ? $this->authorSameAs[0]
                 : $this->authorSameAs;
         }
 
         if (! empty($this->authorCredentials)) {
-            $author['hasCredential'] = array_map(
-                fn($c) => ['@type' => 'EducationalOccupationalCredential', 'credentialCategory' => $c],
-                $this->authorCredentials
+            $author['hasCredential'] = \array_map(
+                fn ($c) => ['@type' => 'EducationalOccupationalCredential', 'credentialCategory' => $c],
+                $this->authorCredentials,
             );
         }
 
@@ -137,11 +152,16 @@ class EEATMarkup
             'name'  => $this->orgName ?? '',
         ];
 
-        if ($this->orgUrl)  $org['url']  = $this->orgUrl;
-        if ($this->orgLogo) $org['logo'] = ['@type' => 'ImageObject', 'url' => $this->orgLogo];
+        if ($this->orgUrl) {
+            $org['url']  = $this->orgUrl;
+        }
+
+        if ($this->orgLogo) {
+            $org['logo'] = ['@type' => 'ImageObject', 'url' => $this->orgLogo];
+        }
 
         if (! empty($this->orgSameAs)) {
-            $org['sameAs'] = count($this->orgSameAs) === 1
+            $org['sameAs'] = \count($this->orgSameAs) === 1
                 ? $this->orgSameAs[0]
                 : $this->orgSameAs;
         }
@@ -154,9 +174,10 @@ class EEATMarkup
      */
     public function generateAuthorSchema(bool $minify = false): string
     {
-        $data  = array_merge(['@context' => 'https://schema.org'], $this->authorToArray());
+        $data  = \array_merge(['@context' => 'https://schema.org'], $this->authorToArray());
         $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR | ($minify ? 0 : JSON_PRETTY_PRINT);
-        return '<script type="application/ld+json">' . json_encode($data, $flags) . '</script>';
+
+        return '<script type="application/ld+json">' . \json_encode($data, $flags) . '</script>';
     }
 
     /**
@@ -164,8 +185,9 @@ class EEATMarkup
      */
     public function generateOrganizationSchema(bool $minify = false): string
     {
-        $data  = array_merge(['@context' => 'https://schema.org'], $this->organizationToArray());
+        $data  = \array_merge(['@context' => 'https://schema.org'], $this->organizationToArray());
         $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR | ($minify ? 0 : JSON_PRETTY_PRINT);
-        return '<script type="application/ld+json">' . json_encode($data, $flags) . '</script>';
+
+        return '<script type="application/ld+json">' . \json_encode($data, $flags) . '</script>';
     }
 }

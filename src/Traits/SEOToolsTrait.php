@@ -38,6 +38,7 @@ trait SEOToolsTrait
         if ($this->_seotools === null) {
             $this->_seotools = new SEOTools();
         }
+
         return $this->_seotools;
     }
 }

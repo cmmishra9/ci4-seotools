@@ -72,7 +72,7 @@ class TechnicalTest extends TestCase
         $sitemap = new Sitemap();
         $sitemap->addUrl(
             'https://example.com/gallery',
-            images: [['loc' => 'https://example.com/photo.jpg', 'caption' => 'A photo']]
+            images: [['loc' => 'https://example.com/photo.jpg', 'caption' => 'A photo']],
         );
         $xml = $sitemap->toXml();
         $this->assertStringContainsString('<image:image>', $xml);
@@ -121,7 +121,8 @@ class TechnicalTest extends TestCase
     {
         $index = new SitemapIndex();
         $index->addSitemap('https://example.com/sitemap-posts.xml', '2024-01-01')
-              ->addSitemap('https://example.com/sitemap-pages.xml');
+            ->addSitemap('https://example.com/sitemap-pages.xml')
+        ;
         $xml = $index->toXml();
         $this->assertStringContainsString('<sitemapindex', $xml);
         $this->assertStringContainsString('sitemap-posts.xml', $xml);
@@ -189,8 +190,9 @@ class TechnicalTest extends TestCase
     {
         $hm = new HreflangManager();
         $hm->addLanguage('en', 'https://example.com/')
-           ->addLanguage('fr', 'https://fr.example.com/')
-           ->setDefault('https://example.com/');
+            ->addLanguage('fr', 'https://fr.example.com/')
+            ->setDefault('https://example.com/')
+        ;
         $html = $hm->generate();
         $this->assertStringContainsString('hreflang="en"', $html);
         $this->assertStringContainsString('hreflang="fr"', $html);

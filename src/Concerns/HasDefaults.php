@@ -24,6 +24,7 @@ trait HasDefaults
     {
         if ($config !== null) {
             $this->config = $config;
+
             return;
         }
         /** @var SEOToolsConfig $cfg */
@@ -37,6 +38,7 @@ trait HasDefaults
     public function setConfig(SEOToolsConfig $config): static
     {
         $this->config = $config;
+
         return $this;
     }
 }

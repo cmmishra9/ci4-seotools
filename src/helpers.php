@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-use RcsCodes\SEOTools\SEOTools;
-use RcsCodes\SEOTools\Meta\SEOMeta;
-use RcsCodes\SEOTools\Meta\OpenGraph;
-use RcsCodes\SEOTools\Meta\TwitterCard;
-use RcsCodes\SEOTools\Meta\JsonLd;
-use RcsCodes\SEOTools\Meta\JsonLdMulti;
-use RcsCodes\SEOTools\Schema\SchemaGraph;
-use RcsCodes\SEOTools\Technical\Sitemap;
-use RcsCodes\SEOTools\Technical\RobotsTxt;
-use RcsCodes\SEOTools\Technical\HreflangManager;
 use RcsCodes\SEOTools\Content\ResourceHints;
 use RcsCodes\SEOTools\Enterprise\EEATMarkup;
+use RcsCodes\SEOTools\Meta\JsonLd;
+use RcsCodes\SEOTools\Meta\JsonLdMulti;
+use RcsCodes\SEOTools\Meta\OpenGraph;
+use RcsCodes\SEOTools\Meta\SEOMeta;
+use RcsCodes\SEOTools\Meta\TwitterCard;
+use RcsCodes\SEOTools\Schema\SchemaGraph;
+use RcsCodes\SEOTools\SEOTools;
+use RcsCodes\SEOTools\Technical\HreflangManager;
+use RcsCodes\SEOTools\Technical\RobotsTxt;
+use RcsCodes\SEOTools\Technical\Sitemap;
 
 /**
  * SEOTools Global Helpers
@@ -29,13 +29,15 @@ use RcsCodes\SEOTools\Enterprise\EEATMarkup;
 // Singleton container
 // ─────────────────────────────────────────────────────────────────────────────
 
-if (! function_exists('_seotools_instance')) {
+if (! \function_exists('_seotools_instance')) {
     function _seotools_instance(): SEOTools
     {
         static $instance = null;
+
         if ($instance === null) {
             $instance = new SEOTools();
         }
+
         return $instance;
     }
 }
@@ -44,7 +46,7 @@ if (! function_exists('_seotools_instance')) {
 // Primary entry point
 // ─────────────────────────────────────────────────────────────────────────────
 
-if (! function_exists('seo')) {
+if (! \function_exists('seo')) {
     /**
      * Return the shared SEOTools instance (all-in-one access).
      *
@@ -61,70 +63,103 @@ if (! function_exists('seo')) {
 // Component shortcuts
 // ─────────────────────────────────────────────────────────────────────────────
 
-if (! function_exists('seo_meta')) {
+if (! \function_exists('seo_meta')) {
     /** @example seo_meta()->setTitle('Home'); */
-    function seo_meta(): SEOMeta { return _seotools_instance()->metatags(); }
+    function seo_meta(): SEOMeta
+    {
+        return _seotools_instance()->metatags();
+    }
 }
 
-if (! function_exists('seo_og')) {
+if (! \function_exists('seo_og')) {
     /** @example seo_og()->setUrl('https://…')->addProperty('type', 'article'); */
-    function seo_og(): OpenGraph { return _seotools_instance()->opengraph(); }
+    function seo_og(): OpenGraph
+    {
+        return _seotools_instance()->opengraph();
+    }
 }
 
-if (! function_exists('seo_twitter')) {
+if (! \function_exists('seo_twitter')) {
     /** @example seo_twitter()->setSite('@handle')->setImage('https://…/cover.jpg'); */
-    function seo_twitter(): TwitterCard { return _seotools_instance()->twitter(); }
+    function seo_twitter(): TwitterCard
+    {
+        return _seotools_instance()->twitter();
+    }
 }
 
-if (! function_exists('seo_jsonld')) {
+if (! \function_exists('seo_jsonld')) {
     /** @example seo_jsonld()->setType('Article')->addImage('https://…/img.jpg'); */
-    function seo_jsonld(): JsonLd { return _seotools_instance()->jsonLd(); }
+    function seo_jsonld(): JsonLd
+    {
+        return _seotools_instance()->jsonLd();
+    }
 }
 
-if (! function_exists('seo_jsonld_multi')) {
+if (! \function_exists('seo_jsonld_multi')) {
     /** @example seo_jsonld_multi()->newJsonLd()->setType('WebPage'); */
-    function seo_jsonld_multi(): JsonLdMulti { return _seotools_instance()->jsonLdMulti(); }
+    function seo_jsonld_multi(): JsonLdMulti
+    {
+        return _seotools_instance()->jsonLdMulti();
+    }
 }
 
-if (! function_exists('seo_schema')) {
+if (! \function_exists('seo_schema')) {
     /**
      * Access the @graph schema builder.
      *
      * @example seo_schema()->add(new Article)->add(new BreadcrumbList)->generate();
      */
-    function seo_schema(): SchemaGraph { return _seotools_instance()->schema(); }
+    function seo_schema(): SchemaGraph
+    {
+        return _seotools_instance()->schema();
+    }
 }
 
-if (! function_exists('seo_sitemap')) {
+if (! \function_exists('seo_sitemap')) {
     /** @example seo_sitemap()->addUrl('https://…', 'daily', '1.0')->toResponse(); */
-    function seo_sitemap(): Sitemap { return _seotools_instance()->sitemap(); }
+    function seo_sitemap(): Sitemap
+    {
+        return _seotools_instance()->sitemap();
+    }
 }
 
-if (! function_exists('seo_robots')) {
+if (! \function_exists('seo_robots')) {
     /** @example seo_robots()->applyAiBotPresets()->addSitemap('https://…/sitemap.xml'); */
-    function seo_robots(): RobotsTxt { return _seotools_instance()->robots(); }
+    function seo_robots(): RobotsTxt
+    {
+        return _seotools_instance()->robots();
+    }
 }
 
-if (! function_exists('seo_hreflang')) {
+if (! \function_exists('seo_hreflang')) {
     /** @example seo_hreflang()->addLanguage('en', 'https://…')->setDefault('https://…'); */
-    function seo_hreflang(): HreflangManager { return _seotools_instance()->hreflang(); }
+    function seo_hreflang(): HreflangManager
+    {
+        return _seotools_instance()->hreflang();
+    }
 }
 
-if (! function_exists('seo_hints')) {
+if (! \function_exists('seo_hints')) {
     /** @example seo_hints()->preconnect('https://fonts.googleapis.com')->preload('/font.woff2', 'font'); */
-    function seo_hints(): ResourceHints { return _seotools_instance()->resourceHints(); }
+    function seo_hints(): ResourceHints
+    {
+        return _seotools_instance()->resourceHints();
+    }
 }
 
-if (! function_exists('seo_eeat')) {
+if (! \function_exists('seo_eeat')) {
     /** @example seo_eeat()->setAuthor('Jane Smith')->addAuthorSameAs('https://linkedin.com/in/jane'); */
-    function seo_eeat(): EEATMarkup { return _seotools_instance()->eeat(); }
+    function seo_eeat(): EEATMarkup
+    {
+        return _seotools_instance()->eeat();
+    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Utility
 // ─────────────────────────────────────────────────────────────────────────────
 
-if (! function_exists('seo_reset')) {
+if (! \function_exists('seo_reset')) {
     /**
      * Reset the shared instance (useful in tests or multi-request CLi scripts).
      */
@@ -134,7 +169,7 @@ if (! function_exists('seo_reset')) {
     }
 }
 
-if (! function_exists('seo_generate')) {
+if (! \function_exists('seo_generate')) {
     /**
      * Generate all SEO tags and return the HTML string.
      *

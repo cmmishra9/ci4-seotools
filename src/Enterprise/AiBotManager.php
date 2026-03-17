@@ -60,6 +60,7 @@ class AiBotManager
     public function allowRetrieval(bool $allow = true): static
     {
         $this->allowRetrieval = $allow;
+
         return $this;
     }
 
@@ -71,6 +72,7 @@ class AiBotManager
     public function allowTraining(bool $allow = true): static
     {
         $this->allowTraining = $allow;
+
         return $this;
     }
 
@@ -82,6 +84,7 @@ class AiBotManager
     public function allowImages(bool $allow = true): static
     {
         $this->allowImages = $allow;
+
         return $this;
     }
 
@@ -89,12 +92,13 @@ class AiBotManager
      * Override policy for a specific bot.
      *
      * @param 'allow'|'disallow'|array<string> $policy
-     *   Pass 'allow', 'disallow', or an explicit array of robots.txt directives
-     *   e.g. ['Allow: /public/', 'Disallow: /private/']
+     *                                                 Pass 'allow', 'disallow', or an explicit array of robots.txt directives
+     *                                                 e.g. ['Allow: /public/', 'Disallow: /private/']
      */
     public function setBot(string $botName, string|array $policy): static
     {
         $this->overrides[$botName] = $policy;
+
         return $this;
     }
 
@@ -129,15 +133,17 @@ class AiBotManager
             $directives[] = 'noai';
             $directives[] = 'noimageai';
         }
+
         if (! $this->allowRetrieval) {
             $directives[] = 'noindex';
         }
+
         if (! $this->allowImages) {
             $directives[] = 'noimageindex';
         }
 
-        if (! empty($directives) && method_exists($response, 'setHeader')) {
-            $response->setHeader('X-Robots-Tag', implode(', ', $directives));
+        if (! empty($directives) && \method_exists($response, 'setHeader')) {
+            $response->setHeader('X-Robots-Tag', \implode(', ', $directives));
         }
 
         return $response;
@@ -149,22 +155,23 @@ class AiBotManager
      * Build robots.txt rules for every known AI bot.
      *
      * @return array<string, array<string>>
-     *   Keys are bot names.
-     *   Values are flat arrays of robots.txt directive lines, e.g.:
-     *   ['Allow: /', 'Crawl-delay: 10']  or  ['Disallow: /']
+     *                                      Keys are bot names.
+     *                                      Values are flat arrays of robots.txt directive lines, e.g.:
+     *                                      ['Allow: /', 'Crawl-delay: 10']  or  ['Disallow: /']
      *
      * Feed the result into RobotsTxt or iterate it directly.
      */
     public function toRobotsTxtRules(): array
     {
         $rules   = [];
-        $allBots = array_merge(self::RETRIEVAL_BOTS, self::TRAINING_BOTS, self::MIXED_BOTS);
+        $allBots = \array_merge(self::RETRIEVAL_BOTS, self::TRAINING_BOTS, self::MIXED_BOTS);
 
         foreach ($allBots as $bot) {
             // Per-bot override takes precedence
             if (isset($this->overrides[$bot])) {
                 $override = $this->overrides[$bot];
-                if (is_array($override)) {
+
+                if (\is_array($override)) {
                     // Caller passed explicit directive lines
                     $rules[$bot] = $override;
                 } else {
@@ -173,9 +180,9 @@ class AiBotManager
                 continue;
             }
 
-            $isRetrieval = in_array($bot, self::RETRIEVAL_BOTS, true);
-            $isTraining  = in_array($bot, self::TRAINING_BOTS, true);
-            $isMixed     = in_array($bot, self::MIXED_BOTS, true);
+            $isRetrieval = \in_array($bot, self::RETRIEVAL_BOTS, true);
+            $isTraining  = \in_array($bot, self::TRAINING_BOTS, true);
+            $isMixed     = \in_array($bot, self::MIXED_BOTS, true);
 
             $shouldAllow = ($isRetrieval && $this->allowRetrieval)
                 || ($isTraining  && $this->allowTraining)
@@ -201,14 +208,16 @@ class AiBotManager
             $directives[] = 'noai';
             $directives[] = 'noimageai';
         }
+
         if (! $this->allowRetrieval) {
             $directives[] = 'noindex';
             $directives[] = 'nofollow';
         }
+
         if (! $this->allowImages) {
             $directives[] = 'noimageindex';
         }
 
-        return empty($directives) ? null : implode(', ', array_unique($directives));
+        return empty($directives) ? null : \implode(', ', \array_unique($directives));
     }
 }

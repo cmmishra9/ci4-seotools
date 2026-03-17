@@ -63,94 +63,107 @@ class SEOMeta implements MetaTagsInterface
 
     public function setTitle(string $title): static
     {
-        $this->title = strip_tags($title);
+        $this->title = \strip_tags($title);
+
         return $this;
     }
 
     public function setTitleDefault(string $default): static
     {
-        $this->titleDefault = strip_tags($default);
+        $this->titleDefault = \strip_tags($default);
+
         return $this;
     }
 
     public function setTitleSeparator(string $separator): static
     {
         $this->titleSeparator = $separator;
+
         return $this;
     }
 
     public function setDescription(string $description): static
     {
-        $this->description = strip_tags($description);
+        $this->description = \strip_tags($description);
+
         return $this;
     }
 
     public function setKeywords(array|string $keywords): static
     {
-        if (is_string($keywords)) {
-            $keywords = explode(',', $keywords);
+        if (\is_string($keywords)) {
+            $keywords = \explode(',', $keywords);
         }
-        $this->keywords = array_map('trim', $keywords);
+        $this->keywords = \array_map('trim', $keywords);
+
         return $this;
     }
 
     public function addKeyword(array|string $keyword): static
     {
-        if (is_array($keyword)) {
-            $this->keywords = array_merge($this->keywords, array_map('trim', $keyword));
+        if (\is_array($keyword)) {
+            $this->keywords = \array_merge($this->keywords, \array_map('trim', $keyword));
         } else {
-            $this->keywords[] = trim($keyword);
+            $this->keywords[] = \trim($keyword);
         }
+
         return $this;
     }
 
     public function setRobots(string $robots): static
     {
         $this->robots = $robots;
+
         return $this;
     }
 
     public function setCanonical(string $url): static
     {
         $this->canonical = $url;
+
         return $this;
     }
 
     public function setPrev(string $url): static
     {
         $this->prev = $url;
+
         return $this;
     }
 
     public function setNext(string $url): static
     {
         $this->next = $url;
+
         return $this;
     }
 
     public function addMeta(array|string $meta, ?string $value = null, string $name = 'name'): static
     {
-        if (is_array($meta)) {
+        if (\is_array($meta)) {
             foreach ($meta as $key => $val) {
                 $this->metas[] = ['attribute' => $name, 'name' => $key, 'content' => (string) $val];
             }
         } else {
             $this->metas[] = ['attribute' => $name, 'name' => $meta, 'content' => (string) $value];
         }
+
         return $this;
     }
 
     public function removeMeta(string $key): static
     {
-        $this->metas = array_values(
-            array_filter($this->metas, fn($m) => $m['name'] !== $key)
+        $this->metas = \array_values(
+            \array_filter($this->metas, fn ($m) => $m['name'] !== $key),
         );
+
         return $this;
     }
 
     public function setAlternateLanguage(string $lang, string $url): static
     {
         $this->alternateLanguages = [['lang' => $lang, 'url' => $url]];
+
         return $this;
     }
 
@@ -158,19 +171,22 @@ class SEOMeta implements MetaTagsInterface
     public function setAlternateLanguages(array $languages): static
     {
         $this->alternateLanguages = $languages;
+
         return $this;
     }
 
     public function addAlternateLanguage(string $lang, string $url): static
     {
         $this->alternateLanguages[] = ['lang' => $lang, 'url' => $url];
+
         return $this;
     }
 
     /** @param array<array{lang:string,url:string}> $languages */
     public function addAlternateLanguages(array $languages): static
     {
-        $this->alternateLanguages = array_merge($this->alternateLanguages, $languages);
+        $this->alternateLanguages = \array_merge($this->alternateLanguages, $languages);
+
         return $this;
     }
 
@@ -209,6 +225,7 @@ class SEOMeta implements MetaTagsInterface
         if ($this->canonical === '__auto__') {
             return current_url();
         }
+
         return $this->canonical;
     }
 
@@ -236,6 +253,7 @@ class SEOMeta implements MetaTagsInterface
         $html = [];
 
         $builtTitle = $this->buildTitle();
+
         if ($builtTitle !== '') {
             $html[] = '<title>' . esc($builtTitle) . '</title>';
         }
@@ -245,7 +263,7 @@ class SEOMeta implements MetaTagsInterface
         }
 
         if (! empty($this->keywords)) {
-            $html[] = '<meta name="keywords" content="' . esc(implode(', ', $this->keywords)) . '">';
+            $html[] = '<meta name="keywords" content="' . esc(\implode(', ', $this->keywords)) . '">';
         }
 
         if ($this->robots !== null && $this->robots !== '') {
@@ -303,6 +321,7 @@ class SEOMeta implements MetaTagsInterface
         $this->robots             = null;
         $this->alternateLanguages = [];
         $this->applyDefaults();
+
         return $this;
     }
 
@@ -317,22 +336,28 @@ class SEOMeta implements MetaTagsInterface
         if (! empty($d['title'])) {
             $this->titleDefault = (string) $d['title'];
         }
+
         if (! empty($d['separator'])) {
             $this->titleSeparator = (string) $d['separator'];
         }
+
         if (isset($d['titleBefore'])) {
             $this->titleBefore = (bool) $d['titleBefore'];
         }
+
         if (! empty($d['description'])) {
             $this->description = (string) $d['description'];
         }
+
         if (! empty($d['keywords'])) {
             $this->keywords = (array) $d['keywords'];
         }
+
         if (! empty($d['robots'])) {
             $this->robots = (string) $d['robots'];
         }
-        if (array_key_exists('canonical', $d) && $d['canonical'] !== false) {
+
+        if (\array_key_exists('canonical', $d) && $d['canonical'] !== false) {
             // null means 'auto-detect at render time'; false disables canonical entirely
             $this->canonical = $d['canonical'] === null ? '__auto__' : (string) $d['canonical'];
         }

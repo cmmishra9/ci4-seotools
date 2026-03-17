@@ -25,6 +25,7 @@ class SitemapIndex
     public function addSitemap(string $url, ?string $lastmod = null): static
     {
         $this->sitemaps[] = ['loc' => $url, 'lastmod' => $lastmod];
+
         return $this;
     }
 
@@ -34,6 +35,7 @@ class SitemapIndex
         foreach ($urls as $url) {
             $this->addSitemap($url);
         }
+
         return $this;
     }
 
@@ -45,7 +47,8 @@ class SitemapIndex
 
         foreach ($this->sitemaps as $entry) {
             $lines[] = '    <sitemap>';
-            $lines[] = '        <loc>' . htmlspecialchars($entry['loc'], ENT_XML1 | ENT_QUOTES) . '</loc>';
+            $lines[] = '        <loc>' . \htmlspecialchars($entry['loc'], ENT_XML1 | ENT_QUOTES) . '</loc>';
+
             if ($entry['lastmod'] !== null) {
                 $lines[] = '        <lastmod>' . $entry['lastmod'] . '</lastmod>';
             }
@@ -53,7 +56,8 @@ class SitemapIndex
         }
 
         $lines[] = '</sitemapindex>';
-        return implode("\n", $lines);
+
+        return \implode("\n", $lines);
     }
 
     public function toResponse(): \CodeIgniter\HTTP\ResponseInterface
@@ -62,17 +66,19 @@ class SitemapIndex
         $response = service('response');
         $response->setHeader('Content-Type', 'application/xml; charset=UTF-8');
         $response->setBody($this->toXml());
+
         return $response;
     }
 
     public function count(): int
     {
-        return count($this->sitemaps);
+        return \count($this->sitemaps);
     }
 
     public function reset(): static
     {
         $this->sitemaps = [];
+
         return $this;
     }
 }

@@ -12,7 +12,7 @@ _Changes queued for the next release._
 
 ---
 
-## [0.2.0] — Pre-release candidate
+## [0.2.0] — 2026-03-17
 
 ### Added
 

@@ -109,7 +109,8 @@ class SEOToolsTest extends TestCase
     public function testGenerateContainsAllSections(): void
     {
         $this->seo->setTitle('Test Page')
-                  ->setDescription('Test description.');
+            ->setDescription('Test description.')
+        ;
         $html = $this->seo->generate();
         $this->assertStringContainsString('<title>', $html);
         $this->assertStringContainsString('og:title', $html);
@@ -155,6 +156,7 @@ class SEOToolsTest extends TestCase
         SEOTools::macro('addBlogDefaults', function () {
             /** @var SEOTools $this */
             $this->metatags()->setRobots('index, follow');
+
             return $this;
         });
         $this->assertTrue(SEOTools::hasMacro('addBlogDefaults'));
@@ -165,6 +167,7 @@ class SEOToolsTest extends TestCase
         SEOTools::macro('setTestTitle', function (string $title) {
             /** @var SEOTools $this */
             $this->setTitle($title);
+
             return $this;
         });
         $this->seo->setTestTitle('Macro Title');
@@ -173,7 +176,7 @@ class SEOToolsTest extends TestCase
 
     public function testMacroFlush(): void
     {
-        SEOTools::macro('testMacro', fn() => 'ok');
+        SEOTools::macro('testMacro', fn () => 'ok');
         SEOTools::flushMacros();
         $this->assertFalse(SEOTools::hasMacro('testMacro'));
     }

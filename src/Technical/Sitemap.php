@@ -49,8 +49,8 @@ class Sitemap implements SitemapInterface
     /**
      * Add a URL entry.
      *
-     * @param array<array<string,string>> $images  [['loc'=>url,'caption'=>'…'], …]
-     * @param array<string,mixed>|null   $video
+     * @param array<array<string,string>> $images [['loc'=>url,'caption'=>'…'], …]
+     * @param array<string,mixed>|null $video
      */
     public function addUrl(
         string  $loc,
@@ -58,7 +58,7 @@ class Sitemap implements SitemapInterface
         ?string $priority   = null,
         ?string $lastmod    = null,
         array   $images     = [],
-        ?array  $video      = null
+        ?array  $video      = null,
     ): static {
         $this->urls[] = [
             'loc'        => $loc,
@@ -68,6 +68,7 @@ class Sitemap implements SitemapInterface
             'images'     => $images,
             'video'      => $video,
         ];
+
         return $this;
     }
 
@@ -81,6 +82,7 @@ class Sitemap implements SitemapInterface
         foreach ($urls as $url) {
             $this->addUrl($url, $changefreq, $priority);
         }
+
         return $this;
     }
 
@@ -102,9 +104,11 @@ class Sitemap implements SitemapInterface
             if ($url['lastmod'] !== null && $url['lastmod'] !== '') {
                 $xml .= '    <lastmod>' . $this->xmlEscape($url['lastmod']) . "</lastmod>\n";
             }
+
             if ($url['changefreq'] !== null && $url['changefreq'] !== '') {
                 $xml .= '    <changefreq>' . $this->xmlEscape($url['changefreq']) . "</changefreq>\n";
             }
+
             if ($url['priority'] !== null && $url['priority'] !== '') {
                 $xml .= '    <priority>' . $this->xmlEscape($url['priority']) . "</priority>\n";
             }
@@ -113,8 +117,14 @@ class Sitemap implements SitemapInterface
             foreach ($url['images'] as $img) {
                 $xml .= "    <image:image>\n";
                 $xml .= '      <image:loc>' . $this->xmlEscape($img['loc']) . "</image:loc>\n";
-                if (! empty($img['caption']))  $xml .= '      <image:caption>' . $this->xmlEscape($img['caption']) . "</image:caption>\n";
-                if (! empty($img['title']))    $xml .= '      <image:title>'   . $this->xmlEscape($img['title'])   . "</image:title>\n";
+
+                if (! empty($img['caption'])) {
+                    $xml .= '      <image:caption>' . $this->xmlEscape($img['caption']) . "</image:caption>\n";
+                }
+
+                if (! empty($img['title'])) {
+                    $xml .= '      <image:title>'   . $this->xmlEscape($img['title'])   . "</image:title>\n";
+                }
                 $xml .= "    </image:image>\n";
             }
 
@@ -125,10 +135,22 @@ class Sitemap implements SitemapInterface
                 $xml .= '      <video:thumbnail_loc>'  . $this->xmlEscape($v['thumbnail_loc'])  . "</video:thumbnail_loc>\n";
                 $xml .= '      <video:title>'          . $this->xmlEscape($v['title'])           . "</video:title>\n";
                 $xml .= '      <video:description>'    . $this->xmlEscape($v['description'])     . "</video:description>\n";
-                if (! empty($v['content_loc']))    $xml .= '      <video:content_loc>'    . $this->xmlEscape($v['content_loc'])    . "</video:content_loc>\n";
-                if (! empty($v['player_loc']))     $xml .= '      <video:player_loc>'     . $this->xmlEscape($v['player_loc'])     . "</video:player_loc>\n";
-                if (! empty($v['duration']))       $xml .= '      <video:duration>'       . $this->xmlEscape((string)$v['duration']).'</video:duration>'."\n";
-                if (! empty($v['publication_date']))$xml .= '      <video:publication_date>'.$this->xmlEscape($v['publication_date'])."</video:publication_date>\n";
+
+                if (! empty($v['content_loc'])) {
+                    $xml .= '      <video:content_loc>'    . $this->xmlEscape($v['content_loc'])    . "</video:content_loc>\n";
+                }
+
+                if (! empty($v['player_loc'])) {
+                    $xml .= '      <video:player_loc>'     . $this->xmlEscape($v['player_loc'])     . "</video:player_loc>\n";
+                }
+
+                if (! empty($v['duration'])) {
+                    $xml .= '      <video:duration>'       . $this->xmlEscape((string)$v['duration']).'</video:duration>'."\n";
+                }
+
+                if (! empty($v['publication_date'])) {
+                    $xml .= '      <video:publication_date>'.$this->xmlEscape($v['publication_date'])."</video:publication_date>\n";
+                }
                 $xml .= "    </video:video>\n";
             }
 
@@ -136,6 +158,7 @@ class Sitemap implements SitemapInterface
         }
 
         $xml .= '</urlset>';
+
         return $xml;
     }
 
@@ -148,22 +171,24 @@ class Sitemap implements SitemapInterface
         $response = service('response');
         $response->setHeader('Content-Type', 'application/xml; charset=UTF-8');
         $response->setBody($this->toXml());
+
         return $response;
     }
 
     public function count(): int
     {
-        return count($this->urls);
+        return \count($this->urls);
     }
 
     public function reset(): static
     {
         $this->urls = [];
+
         return $this;
     }
 
     protected function xmlEscape(string $value): string
     {
-        return htmlspecialchars($value, ENT_XML1 | ENT_QUOTES, 'UTF-8');
+        return \htmlspecialchars($value, ENT_XML1 | ENT_QUOTES, 'UTF-8');
     }
 }
