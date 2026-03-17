@@ -1,0 +1,10 @@
+parameters:
+    level: 8
+    paths:
+        - src
+    excludePaths:
+        - src/helpers.php
+    treatPhpDocTypesAsCertain: false
+    bootstrapFiles:
+        - tests/bootstrap.php
+    ignoreErrors: []

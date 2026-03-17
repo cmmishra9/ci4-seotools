@@ -1,0 +1,76 @@
+{
+    "name": "rcscodes/ci4-seotools",
+    "description": "Enterprise-grade SEO Tools for CodeIgniter 4 \u2014 meta tags, Open Graph, Twitter Cards, JSON-LD schema types, sitemaps, robots.txt, hreflang, AI-bot governance and more.",
+    "type": "library",
+    "keywords": [
+        "codeigniter4",
+        "seo",
+        "meta-tags",
+        "opengraph",
+        "twitter-cards",
+        "json-ld",
+        "schema",
+        "sitemap",
+        "robots",
+        "structured-data",
+        "hreflang",
+        "breadcrumb",
+        "rich-snippets",
+        "e-e-a-t"
+    ],
+    "homepage": "https://github.com/rcscodes/ci4-seotools",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Your Name",
+            "email": "you@example.com",
+            "homepage": "https://github.com/rcscodes"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "codeigniter4/framework": "^4.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5 || ^11.0",
+        "phpstan/phpstan": "^1.10",
+        "friendsofphp/php-cs-fixer": "^3.40",
+        "infection/infection": "^0.27"
+    },
+    "autoload": {
+        "psr-4": {
+            "RcsCodes\\SEOTools\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RcsCodes\\SEOTools\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "codeigniter4": {
+            "config": "resources/Config/SEOTools.php",
+            "commands": [
+                "RcsCodes\\SEOTools\\Commands\\PublishCommand"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "phpunit --colors=always",
+        "analyse": "phpstan analyse src --level=8",
+        "cs-fix": "php-cs-fixer fix src tests",
+        "cs-check": "php-cs-fixer fix src tests --dry-run",
+        "coverage": "phpunit --coverage-text"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
