@@ -1,6 +1,6 @@
 # ci4-seotools
 
-Enterprise-grade SEO Tools for **CodeIgniter 4** — a complete port and extension of the battle-tested [artesaos/seotools](https://github.com/artesaos/seotools) ecosystem, rebuilt from the ground up for CI4 with schema validation, AI-bot governance, multi-tenancy, and ≥95% test coverage.
+Enterprise-grade SEO Tools for **CodeIgniter 4** — a complete port and extension of the battle-tested ecosystem, rebuilt from the ground up for CI4 with schema validation, AI-bot governance, multi-tenancy, and ≥95% test coverage.
 
 [![CI](https://github.com/cmmishra9/ci4-seotools/actions/workflows/ci.yml/badge.svg)](https://github.com/cmmishra9/ci4-seotools/actions)
 [![Latest Version](https://img.shields.io/packagist/v/cmmishra9/ci4-seotools.svg)](https://packagist.org/packages/cmmishra9/ci4-seotools)
